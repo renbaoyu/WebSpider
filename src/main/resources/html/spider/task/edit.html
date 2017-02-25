@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>抓取任务管理</title>
+</head>
+<body>
+	<label>抓取任务设置</label>
+	<form th:action="${action}" method="post" th:object="${task}">
+		<input name="id" th:field="*{id}" type="hidden" />
+		<ul>
+			<li><label>任务名称</label><input type="text" name="name"
+				th:field="*{name}" /></li>
+			<li><label>起始URL</label><input type="text" name="startUrl"
+				th:field="*{startUrl}" /></li>
+			<li><label>完成模式</label><input type="text" name="finishedMode"
+				th:field="*{finishedMode}" /></li>
+			<li><label>备注</label><input type="text" name="remarks"
+				th:field="*{remarks}" /></li>
+		</ul>
+		<input type="submit" value="提交" /> <a href="/spider/task/list">返回</a>
+	</form>
+	<label>页面规则设置</label>
+	<a th:href="@{'/spider/task_page/new?task=' + ${task.id}}">新增</a>
+	<table>
+		<thead>
+			<tr>
+				<th>序号</th>
+				<th>操作</th>
+				<th>页面名称</th>
+				<th>页面URL表达式类型</th>
+				<th>页面URL表达式</th>
+				<th>是否目标页面</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="item:${taskPagelist}">
+				<td th:text="${itemStat.count}">1</td>
+				<td><a th:href="@{'/spider/task_page/edit/' + ${item.id}}">修改</a>
+					<a th:href="@{'/spider/task_page/delete/' + ${item.id}}">删除</a></td>
+				<td th:text="${item.name}"></td>
+				<td th:text="${item.urlRuleType}"></td>
+				<td th:text="${item.urlRuleExpression}"></td>
+				<td th:text="${item.target}"></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

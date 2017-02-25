@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>抓取任务管理</title>
+</head>
+<body>
+	<label>抓取内容设置</label>
+	<form th:action="${action}" method="post" th:object="${content}">
+		<input name="page.id" th:value="${pageid}" type="hidden" />
+		<input name="id" th:field="*{id}" type="hidden" />
+		<ul>
+			<li><label>内容名称</label><input type="text" name="name"
+				th:field="*{name}" /></li>
+			<li><label>规则表达式类型</label><input type="text" name="ruleType"
+				th:field="*{ruleType}" /></li>
+			<li><label>规则表达式</label><input type="text" name="ruleExpression"
+				th:field="*{ruleExpression}" /></li>
+			<li><label>内容可否为空</label><input type="text" name="emptyEnabled"
+				th:field="*{emptyEnabled}" /></li>
+		</ul>
+		<input type="submit" value="提交" /> <a th:href="@{'/spider/task_page/edit/' + ${pageid}}">返回</a>
+	</form>
+</body>
+</html>
