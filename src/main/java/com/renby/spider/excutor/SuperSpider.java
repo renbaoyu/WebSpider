@@ -51,7 +51,7 @@ public class SuperSpider extends Spider {
 	@Override
 	protected void extractAndAddRequests(Page page, boolean spawnUrl) {
 		ExtendPage exPage = (ExtendPage) page;
-		// 为每个页面的抓取器添加URL
+		// 为每个页面的监测的页面添加URL
 		if (spawnUrl && !exPage.getNewURLMap().isEmpty()) {
 			for (Entry<SuperSpider, List<String>> urlEntry : exPage.getNewURLMap().entrySet()) {
 				SuperSpider spider = urlEntry.getKey();

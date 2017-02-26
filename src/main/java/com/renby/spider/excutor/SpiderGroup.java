@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import com.renby.spider.entity.Explan;
 import com.renby.spider.entity.RunResult;
 import com.renby.spider.entity.Task;
-import com.renby.spider.entity.TaskContentRule;
 import com.renby.spider.service.impl.SpiderExcuteServiceImpl;
 
 import us.codecraft.webmagic.scheduler.MonitorableScheduler;
@@ -27,6 +26,7 @@ public class SpiderGroup {
 		this.service = service;
 		this.result = new RunResult();
 		this.result.setName(task.getName());
+		this.result.setTask(task);
 	}
 
 	public SpiderGroup(Explan explan, SpiderExcuteServiceImpl service) {
@@ -35,6 +35,7 @@ public class SpiderGroup {
 		this.service = service;
 		this.result = new RunResult();
 		this.result.setName(task.getName());
+		this.result.setTask(task);
 	}
 
 	public void addSpider(SuperSpider spider) {

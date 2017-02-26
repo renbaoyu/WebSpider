@@ -1,6 +1,7 @@
 package com.renby.spider.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,6 +24,7 @@ public class RunResultPage implements Serializable {
 	@JsonBackReference
 	private RunResult result;
 	private String name;
+	private Date finishedDate = new Date();
 
 	public Long getId() {
 		return id;
@@ -46,6 +48,14 @@ public class RunResultPage implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Date getFinishedTime() {
+		return finishedDate;
+	}
+
+	public void setFinishedTime(Date finishDate) {
+		this.finishedDate = finishDate;
 	}
 
 }

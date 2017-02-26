@@ -110,7 +110,8 @@ public class TaskPageController extends AbstractController {
 	@RequestMapping("delete/{id}")
 	public ModelAndView delete(@PathVariable("id") Long id, HttpServletResponse response) throws ServletException, IOException {
 		TaskPageRule page = taskPageRepository.findOne(id);
-		taskPageRepository.delete(id);
+		taskContentRepository.deleteByPage(page);
+		taskPageRepository.delete(page);
 		response.sendRedirect("/spider/task/view/" + page.getTask().getId());
 		return null;
 	}

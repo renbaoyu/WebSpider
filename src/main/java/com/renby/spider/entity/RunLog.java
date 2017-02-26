@@ -31,7 +31,7 @@ public class RunLog implements Serializable {
 	private int stateCode;
 	@Column(columnDefinition = "MEDIUMBLOB")
 	private byte[] content;
-	private Date finishedDate;
+	private Date finishedTime;
 
 	public Long getId() {
 		return id;
@@ -89,12 +89,12 @@ public class RunLog implements Serializable {
 		this.content = content;
 	}
 
-	public Date getFinishedDate() {
-		return finishedDate;
+	public Date getFinishedTime() {
+		return finishedTime;
 	}
 
-	public void setFinishedDate(Date finishedDate) {
-		this.finishedDate = finishedDate;
+	public void setFinishedTime(Date finishedTime) {
+		this.finishedTime = finishedTime;
 	}
 
 	public String getContentCharset() {

@@ -1,9 +1,9 @@
 package com.renby.spider.controller;
 
 public abstract class AbstractController {
-	public static final String LIST_PAGE = "/list";
-	public static final String EDIT_PAGE = "/edit";
-	public static final String VIEW_PAGE = "/view";
+	public static final String PAGE_LIST = "/list";
+	public static final String PAGE_EDIT = "/edit";
+	public static final String PAGE_VIEW = "/view";
 
 	public static final String LIST_DEFAULT_PAGE = "0";
 	public static final String LIST_DEFAULT_PAGE_SIZE = "20";
@@ -11,14 +11,14 @@ public abstract class AbstractController {
 	public abstract String getBasePage();
 
 	public String getListPage() {
-		return getBasePage() + LIST_PAGE;
+		return getBasePage() + PAGE_LIST;
 	}
 
 	public String getEditPage() {
-		return getBasePage() + EDIT_PAGE;
+		return getBasePage() + PAGE_EDIT;
 	}
 
 	public String getViewPage() {
-		return getBasePage() + VIEW_PAGE;
+		return getBasePage() + PAGE_VIEW;
 	}
 }

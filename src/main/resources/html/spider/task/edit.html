@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>抓取任务管理</title>
+<title>监测任务管理</title>
 </head>
 <body>
-	<label>抓取任务设置</label>
+	<label>监测任务设置</label>
 	<form th:action="${action}" method="post" th:object="${task}">
 		<input name="id" th:field="*{id}" type="hidden" />
 		<ul>

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.renby.spider.entity.Task;
 import com.renby.spider.entity.TaskPageRule;
+import com.renby.spider.repository.TaskContentRuleRepository;
 import com.renby.spider.repository.TaskPageRuleRepository;
 import com.renby.spider.repository.TaskRepository;
 import com.renby.spider.service.ISpiderExcuteService;
@@ -31,6 +32,8 @@ public class TaskController extends AbstractController {
 	private TaskRepository taskRepository;
 	@Autowired
 	private TaskPageRuleRepository taskPageRepository;
+	@Autowired
+	private TaskContentRuleRepository taskContentRepository;
 	@Autowired
 	private ISpiderExcuteService excuteService;
 
@@ -137,12 +140,16 @@ public class TaskController extends AbstractController {
 	 */
 	@RequestMapping("delete/{id}")
 	public ModelAndView delete(@PathVariable("id") Long id) {
-		taskRepository.delete(id);
+		Task task = taskRepository.findOne(id);
+		List<TaskPageRule> pages = taskPageRepository.findByTask(task);
+		taskContentRepository.deleteByPageIn(pages);
+		taskPageRepository.deleteInBatch(pages);
+		taskRepository.delete(task);
 		return list(null, Integer.valueOf(LIST_DEFAULT_PAGE), Integer.valueOf(LIST_DEFAULT_PAGE_SIZE));
 	}
 
 	/**
-	 * 执行抓取任务
+	 * 执行监测任务
 	 * 
 	 * @param id
 	 * @return

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>监测结果查看</title>
+</head>
+<body>
+	<a href="/spider/runresult/list">返回</a>
+	<br/>
+	<label>页面抽取内容</label>
+	<table>
+		<thead>
+			<tr>
+				<th>序号</th>
+				<th>页面名称</th>
+				<th>完成时间</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="item:${resultPagelist}">
+				<td th:text="${itemStat.count}">1</td>
+				<td><a th:href="@{'/spider/runresult_page/view/' + ${item.id}}"
+					th:text="${item.name}"></a></td>
+				<td th:text="${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

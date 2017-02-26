@@ -13,19 +13,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.renby.spider.entity.RunLog;
 import com.renby.spider.repository.RunLogRepository;
-import com.renby.spider.repository.TaskPageRuleRepository;
-import com.renby.spider.repository.TaskRepository;
 
 @RestController
 @RequestMapping(RunLogController.BASE_URL)
-public class RunLogController {
+public class RunLogController extends AbstractController{
 	public static final String DEFAULT_PAGE = "0";
 	public static final String DEFAULT_PAGE_SIZE = "20";
 	public static final String BASE_URL = "/spider/runlog";
-	@Autowired
-	private TaskRepository taskRepository;
-	@Autowired
-	private TaskPageRuleRepository taskPageRepository;
 	@Autowired
 	private RunLogRepository runLogRepository;
 
@@ -45,6 +39,11 @@ public class RunLogController {
 		List<RunLog> logs = logData.getContent();
 		ModelMap model = new ModelMap();
 		model.addAttribute("runloglist", logs);
-		return new ModelAndView(BASE_URL + "/list", model);
+		return new ModelAndView(getListPage(), model);
+	}
+
+	@Override
+	public String getBasePage() {
+		return BASE_URL;
 	}
 }

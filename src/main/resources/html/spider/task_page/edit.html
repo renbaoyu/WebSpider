@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>抓取任务管理</title>
+<title>监测任务管理</title>
 </head>
 <body>
-	<label>抓取页面设置</label>
+	<label>监测页面设置</label>
 	<form th:action="${action}" method="post" th:object="${page}">
 		<input name="task.id" th:value="${taskid}" type="hidden" /> <input
 			name="id" th:field="*{id}" type="hidden" />
@@ -28,31 +28,5 @@
 		<input type="submit" value="提交" /> <a
 			th:href="@{'/spider/task/view/' + ${taskid}}">返回</a>
 	</form>
-	<label>页面抽取内容设置</label>
-	<a
-		th:href="@{'/spider/task_content/new?page=' + ${page.id}}">新增</a>
-	<table>
-		<thead>
-			<tr>
-				<th>序号</th>
-				<th>操作</th>
-				<th>内容名称</th>
-				<th>内容表达式类型</th>
-				<th>内容表达式</th>
-				<th>可否为空</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="item:${taskContentlist}">
-				<td th:text="${itemStat.count}">1</td>
-				<td><a th:href="@{'/spider/task_content/edit/' + ${item.id}}">修改</a>
-					<a th:href="@{'/spider/task_content/delete/' + ${item.id}}">删除</a></td>
-				<td th:text="${item.name}"></td>
-				<td th:text="${item.ruleType.name}"></td>
-				<td th:text="${item.ruleExpression}"></td>
-				<td th:text="${item.emptyEnabled}"></td>
-			</tr>
-		</tbody>
-	</table>
 </body>
 </html>

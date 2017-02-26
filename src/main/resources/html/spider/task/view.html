@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>抓取任务管理</title>
+<title>监测任务管理</title>
 </head>
 <body>
-	<label>抓取任务设置</label>
+	<label>监测任务设置</label>
 	<input name="id" th:field="*{id}" type="hidden" />
 	<ul>
 		<li><label>任务名称：</label><label th:text="${task.name}"></label></li>
@@ -16,7 +16,7 @@
 	</ul>
 	<a href="/spider/task/list">返回</a>
 	<br/>
-	<label>页面规则设置</label>
+	<label>页面信息设置</label>
 	<a th:href="@{'/spider/task_page/new?task=' + ${task.id}}">新增</a>
 	<table>
 		<thead>
@@ -32,8 +32,8 @@
 		<tbody>
 			<tr th:each="item:${taskPagelist}">
 				<td th:text="${itemStat.count}">1</td>
-				<td><a th:href="!${item.startPage} ? @{'/spider/task_page/edit/' + ${item.id}}" th:text="!${item.startPage} ? '修改'"></a>
-					<a th:href="!${item.startPage} ? @{'/spider/task_page/delete/' + ${item.id}}" th:text="!${item.startPage} ? '删除'"></a></td>
+				<td><a th:if="!${item.startPage}" th:href="@{'/spider/task_page/edit/' + ${item.id}}">修改</a>
+					<a th:if="!${item.startPage}" th:href="@{'/spider/task_page/delete/' + ${item.id}}">删除</a></td>
 				<td><a th:href="@{'/spider/task_page/view/' + ${item.id}}"
 					th:text="${item.name}"></a></td>
 				<td th:text="${item.urlRuleType.name}"></td>

@@ -107,7 +107,7 @@ public class SpiderTaskProcessor implements PageProcessor {
 		log.setContentCharset(exPage.getContentCharset());
 		log.setTask(spiderGroup.getTask());
 		log.setExplan(spiderGroup.getExplan());
-		log.setFinishedDate(new Date());
+		log.setFinishedTime(new Date());
 		log.setUrl(exPage.getUrl().get());
 		log.setStateCode(exPage.getStatusCode());
 		spiderGroup.getService().getRunLogRepository().save(log);
