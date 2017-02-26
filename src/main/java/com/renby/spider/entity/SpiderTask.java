@@ -30,7 +30,7 @@ public class SpiderTask implements Serializable {
 	private Long id;
 	private String name;
 	private String startUrl;
-	private FinishedMode finishedMode;
+	private FinishedMode finishedMode = FinishedMode.ANY_FINISHED;
 	private String remarks;
 
 	public Long getId() {

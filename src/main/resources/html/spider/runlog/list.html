@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>抓取任务管理</title>
+</head>
+<body>
+	<table>
+		<thead>
+			<tr>
+				<th>序号</th>
+				<th>完成时间</th>
+				<th>抓取设置</th>
+				<th>计划任务</th>
+				<th>URL</th>
+				<th>内容类型</th>
+				<th>内容字符集</th>
+				<th>状态码</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="item:${runloglist}">
+				<td th:text="${itemStat.count}">1</td>
+				<td th:text="${#calendars.format(item.finishedDate,'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td th:text="${item.task.name}"></td>
+				<td th:text="${item.explan ne null} ? ${item.explan.name} : ''"></td>
+				<td th:text="${item.url}"></td>
+				<td th:text="${item.contentType}"></td>
+				<td th:text="${item.contentCharset}"></td>
+				<td th:text="${item.stateCode}"></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

@@ -12,8 +12,14 @@
 		<ul>
 			<li><label>页面名称</label><input type="text" name="name"
 				th:field="*{name}" /></li>
-			<li><label>URL表达式类型</label><input type="text" name="urlRuleType"
-				th:field="*{urlRuleType}" /></li>
+			<li><label>URL表达式类型</label><select name="urlRuleType"
+				th:field="*{urlRuleType}">
+					<option value="Normal">普通查找</option>
+					<option value="JSoup">JSoup</option>
+					<option value="Regex">正则表达式</option>
+					<option value="XPath">XPath</option>
+					<option value="CSS">CSS选择器</option>
+			</select></li>
 			<li><label>URL表达式</label><input type="text"
 				name="urlRuleExpression" th:field="*{urlRuleExpression}" /></li>
 			<li><label>是否目标页面</label><input type="text" name="target"
@@ -42,7 +48,7 @@
 				<td><a th:href="@{'/spider/task_content/edit/' + ${item.id}}">修改</a>
 					<a th:href="@{'/spider/task_content/delete/' + ${item.id}}">删除</a></td>
 				<td th:text="${item.name}"></td>
-				<td th:text="${item.ruleType}"></td>
+				<td th:text="${item.ruleType.name}"></td>
 				<td th:text="${item.ruleExpression}"></td>
 				<td th:text="${item.emptyEnabled}"></td>
 			</tr>

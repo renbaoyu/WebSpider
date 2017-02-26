@@ -1,5 +1,10 @@
 package com.renby.spider.excutor;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.renby.spider.entity.SpiderTaskContentRule;
+
 import us.codecraft.webmagic.ResultItems;
 
 public class ExtendResultItems extends ResultItems {
@@ -7,7 +12,7 @@ public class ExtendResultItems extends ResultItems {
 	private static final String CONTENT_BYTES = "contentBytes";
 	private static final String FILE_PARENT = "fileParent";
 	private static final String FILE_NAME = "fileName";
-	
+	private Map<SpiderTaskContentRule, Object> ruleResult = new HashMap<SpiderTaskContentRule, Object>();
 	public String getContentType(){
 		return super.get(CONTENT_TYPE);
 	}
@@ -38,5 +43,13 @@ public class ExtendResultItems extends ResultItems {
 	
 	public void setFileName(String fileName){
 		super.put(FILE_NAME, fileName);
+	}
+	
+	public void putRuleResult(SpiderTaskContentRule rule, Object data){
+		ruleResult.put(rule, data);
+	}
+	
+	public Map<SpiderTaskContentRule, Object> getRuleResult(){
+		return ruleResult;
 	}
 }

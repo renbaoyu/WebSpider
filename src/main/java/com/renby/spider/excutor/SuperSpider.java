@@ -10,6 +10,8 @@ import com.renby.spider.entity.SpiderRunResultPage;
 import com.renby.spider.entity.SpiderTask;
 import com.renby.spider.entity.SpiderTaskContentRule;
 import com.renby.spider.entity.SpiderTaskPageRule;
+import com.renby.spider.excutor.downloader.HttpClientFileDownloader;
+import com.renby.spider.excutor.pipeline.DataBasePipeline;
 import com.renby.spider.excutor.processor.SpiderTaskProcessor;
 
 import us.codecraft.webmagic.Page;
@@ -35,6 +37,9 @@ public class SuperSpider extends Spider {
 		this.task = task;
 		this.pageRule = pageRule;
 		super.exitWhenComplete = false;
+		this.downloader = new HttpClientFileDownloader();
+		this.pipelines.add(new DataBasePipeline());
+		this.setUUID(task.getName() + (pageRule == null ? "" : ":" + pageRule.getName()));
 	}
 
 	public static SuperSpider createSpider(SpiderTask task, SpiderTaskPageRule pageRule,

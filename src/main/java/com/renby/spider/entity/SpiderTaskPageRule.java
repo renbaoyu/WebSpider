@@ -30,7 +30,7 @@ public class SpiderTaskPageRule implements Serializable {
 	@JoinColumn(name = "taskid")
 	private SpiderTask task;
 	private String name;
-	private HtmlMatchRuleType urlRuleType;
+	private HtmlMatchRuleType urlRuleType = HtmlMatchRuleType.Normal;
 	private String urlRuleExpression;
 	private boolean target;
 

@@ -25,17 +25,18 @@ public class SpiderGroup {
 	public SpiderGroup(SpiderTask task, SpiderExcuteServiceImpl service) {
 		this.task = task;
 		this.service = service;
-		this.startSpider = SuperSpider.createSpider(task, null,
-				new ArrayList<SpiderTaskContentRule>());
+		this.startSpider = SuperSpider.createSpider(task, null, new ArrayList<SpiderTaskContentRule>());
+		this.startSpider.addUrl(task.getStartUrl());
 		this.startSpider.setGroup(this);
+		this.result = new SpiderRunResult();
+		this.result.setName(task.getName());
 	}
 
 	public SpiderGroup(SpiderExplan explan, SpiderExcuteServiceImpl service) {
 		this.explan = explan;
 		this.task = explan.getTask();
 		this.service = service;
-		this.startSpider = SuperSpider.createSpider(task, null,
-				new ArrayList<SpiderTaskContentRule>());
+		this.startSpider = SuperSpider.createSpider(task, null, new ArrayList<SpiderTaskContentRule>());
 		this.startSpider.setGroup(this);
 	}
 
@@ -81,10 +82,21 @@ public class SpiderGroup {
 			spider.start();
 		}
 		service.getResultRepository().save(result);
-		new RunStatusListener().start();
+//		service.getResultRepository().flush();
+		new RunStatusListener(this).start();
+	}
+
+	public SuperSpider getStartSpider() {
+		return startSpider;
 	}
 
 	class RunStatusListener extends Thread {
+		SpiderGroup group;
+
+		RunStatusListener(SpiderGroup group) {
+			this.group = group;
+		}
+
 		@Override
 		public void run() {
 			while (true) {
@@ -97,13 +109,20 @@ public class SpiderGroup {
 					throw new RuntimeException("任务被中断", e);
 				}
 			}
+			group.getStartSpider().stop();
+			group.stop();
 
 		}
 
 		private boolean isFinished() {
 			boolean isFinished = true;
+			SuperSpider startSpider = group.getStartSpider();
+			MonitorableScheduler schedule = (MonitorableScheduler) startSpider.getScheduler();
+			if (startSpider.getThreadAlive() > 0 || schedule.getLeftRequestsCount(startSpider) > 0) {
+				isFinished = false;
+			}
 			for (SuperSpider spider : spiders) {
-				MonitorableScheduler schedule = (MonitorableScheduler) spider.getScheduler();
+				schedule = (MonitorableScheduler) spider.getScheduler();
 				if (spider.getThreadAlive() > 0 || schedule.getLeftRequestsCount(spider) > 0) {
 					isFinished = false;
 				}

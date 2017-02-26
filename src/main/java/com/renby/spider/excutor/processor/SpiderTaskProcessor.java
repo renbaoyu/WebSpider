@@ -1,5 +1,6 @@
 package com.renby.spider.excutor.processor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,14 +29,14 @@ public class SpiderTaskProcessor implements PageProcessor {
 		ExtendPage exPage = (ExtendPage) page;
 		for (SpiderTaskContentRule contentRule : contentRules) {
 			List<String> values = excuteMatch(contentRule.getRuleType(), contentRule.getRuleExpression(),
-					exPage.getHtml());
+					exPage.getHtml(), false);
 			if (values != null && !values.isEmpty()) {
-				exPage.putField(contentRule.getName(), values);
+				exPage.putRuleResult(contentRule, values);
 			}
 		}
 		for (SuperSpider spider : spiderGroup.getSpiders()) {
 			List<String> values = excuteMatch(spider.getPageRule().getUrlRuleType(),
-					spider.getPageRule().getUrlRuleExpression(), exPage.getHtml());
+					spider.getPageRule().getUrlRuleExpression(), exPage.getHtml(), true);
 			if (!values.isEmpty()) {
 				exPage.putNewURL(spider, values);
 			}
@@ -45,36 +46,70 @@ public class SpiderTaskProcessor implements PageProcessor {
 
 	@Override
 	public Site getSite() {
-		return null;
+		return Site.me();
 	}
 
 	public void setSpiderGroup(SpiderGroup spiderGroup) {
 		this.spiderGroup = spiderGroup;
 	}
 
-	private List<String> excuteMatch(HtmlMatchRuleType type, String expresion, Html html) {
-		switch (type) {
-		case CSS:
-			return html.css(expresion).all();
-		case JSoup:
-			return html.jsonPath(expresion).all();
-		case Regex:
-			return html.regex(expresion).all();
-		case XPath:
-			return html.xpath(expresion).all();
-		default:
-			throw new RuntimeException("表达式类型不可为空");
+	private List<String> excuteMatch(HtmlMatchRuleType type, String expresion, Html html, boolean isUrl) {
+		if(isUrl){
+			switch (type) {
+			case Normal:
+				List<String> matched = new ArrayList<String>();
+				for (String line : html.links().all()) {
+					if (line.indexOf(expresion) != -1) {
+						matched.add(line);
+					}
+				}
+				return matched;
+			case CSS:
+				return html.css(expresion).links().all();
+			case JSoup:
+				return html.jsonPath(expresion).links().all();
+			case Regex:
+				return html.regex(expresion).links().all();
+			case XPath:
+				return html.xpath(expresion).links().all();
+			default:
+				throw new RuntimeException("表达式类型不可为空");
+			}
+		}else{
+			switch (type) {
+			case Normal:
+				List<String> matched = new ArrayList<String>();
+				for (String line : html.get().split("\\n")) {
+					if (line.indexOf(expresion) != -1) {
+						matched.add(line);
+					}
+				}
+				return matched;
+			case CSS:
+				return html.css(expresion).all();
+			case JSoup:
+				return html.jsonPath(expresion).all();
+			case Regex:
+				return html.regex(expresion).all();
+			case XPath:
+				return html.xpath(expresion).all();
+			default:
+				throw new RuntimeException("表达式类型不可为空");
+			}
 		}
+
 	}
 
 	private void saveRunLog(ExtendPage exPage) {
 		SpiderRunLog log = new SpiderRunLog();
 		log.setContent(exPage.getContentBytes());
 		log.setContentType(exPage.getContentType());
+		log.setContentCharset(exPage.getContentCharset());
 		log.setTask(spiderGroup.getTask());
 		log.setExplan(spiderGroup.getExplan());
 		log.setFinishedDate(new Date());
 		log.setUrl(exPage.getUrl().get());
+		log.setStateCode(exPage.getStatusCode());
 		spiderGroup.getService().getRunLogRepository().save(log);
 	}
 }

@@ -19,11 +19,11 @@ import com.renby.spider.repository.SpiderTaskPageRuleRepository;
 import com.renby.spider.repository.SpiderTaskRepository;
 
 @RestController
-@RequestMapping(SpiderTaskPageController.BASE_URL)
-public class SpiderTaskPageController {
+@RequestMapping(TaskContentController.BASE_URL)
+public class TaskContentController {
 	public static final String DEFAULT_PAGE = "0";
 	public static final String DEFAULT_PAGE_SIZE = "20";
-	public static final String BASE_URL = "/spider/task_page";
+	public static final String BASE_URL = "/spider/task_content";
 	@Autowired
 	private SpiderTaskRepository taskRepository;
 	@Autowired
@@ -37,9 +37,9 @@ public class SpiderTaskPageController {
 	 * @return
 	 */
 	@RequestMapping(value = "new", method = RequestMethod.GET)
-	public ModelAndView createPage(@RequestParam("task") Long taskid) {
+	public ModelAndView createPage(@RequestParam("page") Long pageid) {
 		ModelMap model = getModel(null);
-		model.addAttribute("taskid", taskid);
+		model.addAttribute("pageid", pageid);
 		model.addAttribute("action", BASE_URL + "/new");
 		return new ModelAndView(BASE_URL + "/edit", model);
 	}
@@ -47,12 +47,12 @@ public class SpiderTaskPageController {
 	/**
 	 * 新增提交
 	 * 
-	 * @param newTaskPage
+	 * @param newTaskContent
 	 * @return
 	 */
 	@RequestMapping(value = "new", method = RequestMethod.POST)
-	public ModelAndView create(SpiderTaskPageRule newTaskPage) {
-		SpiderTaskPageRule savedPage = taskPageRepository.save(newTaskPage);
+	public ModelAndView create(SpiderTaskContentRule newTaskContent) {
+		SpiderTaskContentRule savedPage = taskContentRepository.save(newTaskContent);
 		return taskEditPage(savedPage);
 	}
 
@@ -64,9 +64,9 @@ public class SpiderTaskPageController {
 	 */
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public ModelAndView updatePage(@PathVariable("id") long id) {
-		SpiderTaskPageRule saved = taskPageRepository.findOne(id);
+		SpiderTaskContentRule saved = taskContentRepository.findOne(id);
 		ModelMap model = getModel(saved);
-		model.addAttribute("taskid", saved.getTask().getId());
+		model.addAttribute("pageid", saved.getPage().getId());
 		model.addAttribute("action", BASE_URL + "/edit");
 		return new ModelAndView(BASE_URL + "/edit", model);
 	}
@@ -74,14 +74,14 @@ public class SpiderTaskPageController {
 	/**
 	 * 修改提交
 	 * 
-	 * @param modifierdTask
+	 * @param modifierdContent
 	 * @return
 	 */
 	@RequestMapping(value = "edit", method = RequestMethod.POST)
-	public ModelAndView update(SpiderTaskPageRule modifierdTask) {
-		SpiderTaskPageRule saved = taskPageRepository.save(modifierdTask);
+	public ModelAndView update(SpiderTaskContentRule modifierdContent) {
+		SpiderTaskContentRule saved = taskContentRepository.save(modifierdContent);
 		ModelMap model = getModel(saved);
-		model.addAttribute("taskid", saved.getTask().getId());
+		model.addAttribute("pageid", saved.getPage().getId());
 		model.addAttribute("action", BASE_URL + "/edit");
 		return new ModelAndView(BASE_URL + "/edit", model);
 	}
@@ -94,41 +94,39 @@ public class SpiderTaskPageController {
 	 */
 	@RequestMapping("delete/{id}")
 	public ModelAndView delete(@PathVariable("id") Long id) {
-		SpiderTaskPageRule page = taskPageRepository.findOne(id);
-		taskPageRepository.delete(id);
-		return taskEditPage(page);
+		SpiderTaskContentRule content = taskContentRepository.findOne(id);
+		taskContentRepository.delete(id);
+		return taskEditPage(content);
 	}
 
 	/**
 	 * 爬取任务查看界面
 	 * 
-	 * @param page
+	 * @param content
 	 * @return
 	 */
-	private ModelAndView taskEditPage(SpiderTaskPageRule page) {
-		List<SpiderTaskPageRule> taskPageList = taskPageRepository.findByTask(page.getTask());
+	private ModelAndView taskEditPage(SpiderTaskContentRule content) {
+		SpiderTaskPageRule taskPage = taskPageRepository.findOne(content.getPage().getId());
+		List<SpiderTaskPageRule> taskPageList = taskPageRepository.findByTask(taskPage.getTask());
 		ModelMap model = new ModelMap();
-		SpiderTask task = taskRepository.findOne(page.getTask().getId());
+		SpiderTask task = taskRepository.findOne(taskPage.getTask().getId());
 		model.addAttribute("task", task);
 		model.addAttribute("taskPagelist", taskPageList);
-		return new ModelAndView(SpiderTaskController.BASE_URL + "/edit", model);
+		return new ModelAndView(TaskController.BASE_URL + "/edit", model);
 	}
 
 	/**
 	 * 爬取任务查看界面
 	 * 
-	 * @param page
+	 * @param content
 	 * @return
 	 */
-	private ModelMap getModel(SpiderTaskPageRule page) {
+	private ModelMap getModel(SpiderTaskContentRule content) {
 		ModelMap model = new ModelMap();
-		if (page != null) {
-			List<SpiderTaskContentRule> taskContentList = taskContentRepository.findByPage(page);
-			model.addAttribute("page", page);
-			model.addAttribute("taskContentlist", taskContentList);
+		if (content != null) {
+			model.addAttribute("content", content);
 		} else {
-			model.addAttribute("page", new SpiderTaskPageRule());
-			model.addAttribute("taskContentlist", new SpiderTaskContentRule());
+			model.addAttribute("content", new SpiderTaskContentRule());
 
 		}
 		return model;

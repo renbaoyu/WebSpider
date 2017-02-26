@@ -25,7 +25,7 @@
 					th:href="@{'/spider/task/run/' + ${item.id}}">立即执行</a></td>
 				<td th:text="${item.name}"></td>
 				<td th:text="${item.startUrl}"></td>
-				<td th:text="${item.finishedMode}"></td>
+				<td th:text="${item.finishedMode.name}"></td>
 				<td th:text="${item.remarks}"></td>
 			</tr>
 		</tbody>

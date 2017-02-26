@@ -13,8 +13,11 @@
 				th:field="*{name}" /></li>
 			<li><label>起始URL</label><input type="text" name="startUrl"
 				th:field="*{startUrl}" /></li>
-			<li><label>完成模式</label><input type="text" name="finishedMode"
-				th:field="*{finishedMode}" /></li>
+			<li><label>完成模式</label><select name="finishedMode"
+				th:field="*{finishedMode}">
+					<option value="ALL_FINISHED">全部URL完成</option>
+					<option value="ANY_FINISHED">第一次完成</option>
+			</select></li>
 			<li><label>备注</label><input type="text" name="remarks"
 				th:field="*{remarks}" /></li>
 		</ul>
@@ -39,7 +42,7 @@
 				<td><a th:href="@{'/spider/task_page/edit/' + ${item.id}}">修改</a>
 					<a th:href="@{'/spider/task_page/delete/' + ${item.id}}">删除</a></td>
 				<td th:text="${item.name}"></td>
-				<td th:text="${item.urlRuleType}"></td>
+				<td th:text="${item.urlRuleType.name}"></td>
 				<td th:text="${item.urlRuleExpression}"></td>
 				<td th:text="${item.target}"></td>
 			</tr>

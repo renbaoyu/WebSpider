@@ -22,7 +22,7 @@ public class SpiderTaskContentRule implements Serializable {
 	@JoinColumn(name = "pageid")
 	private SpiderTaskPageRule page;
 	private String name;
-	private HtmlMatchRuleType ruleType;
+	private HtmlMatchRuleType ruleType = HtmlMatchRuleType.Normal;
 	private String ruleExpression;
 	private boolean emptyEnabled;
 

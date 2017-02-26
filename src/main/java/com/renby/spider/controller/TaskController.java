@@ -21,8 +21,8 @@ import com.renby.spider.repository.SpiderTaskRepository;
 import com.renby.spider.service.ISpiderExcuteService;
 
 @RestController
-@RequestMapping(SpiderTaskController.BASE_URL)
-public class SpiderTaskController {
+@RequestMapping(TaskController.BASE_URL)
+public class TaskController {
 	public static final String DEFAULT_PAGE = "0";
 	public static final String DEFAULT_PAGE_SIZE = "20";
 	public static final String BASE_URL = "/spider/task";

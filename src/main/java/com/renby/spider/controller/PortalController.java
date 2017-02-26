@@ -6,7 +6,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/spider")
-public class SpiderController {
+public class PortalController {
 	@RequestMapping()
 	public ModelAndView home() {
 		return new ModelAndView("/spider/welcome");

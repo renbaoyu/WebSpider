@@ -1,10 +1,14 @@
 package com.renby.spider.excutor.pipeline;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 
 import com.renby.spider.entity.SpiderRunResultData;
+import com.renby.spider.entity.SpiderTaskContentRule;
 import com.renby.spider.excutor.ExtendResultItems;
 import com.renby.spider.excutor.SuperSpider;
+import com.renby.spider.repository.SpiderRunResultDataRepository;
 
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
@@ -23,13 +27,20 @@ public class DataBasePipeline implements Pipeline {
 	public void process(ResultItems resultItems, Task task) {
 		ExtendResultItems items = (ExtendResultItems) resultItems;
 		SuperSpider spider = (SuperSpider) task;
-		for(Entry<String, Object> entry :items.getAll().entrySet()){
+		List<SpiderRunResultData> datas = new ArrayList<SpiderRunResultData>();
+		for (Entry<SpiderTaskContentRule, Object> entry : items.getRuleResult().entrySet()) {
 			SpiderRunResultData data = new SpiderRunResultData();
-			data.setName(entry.getKey());
+			data.setName(entry.getKey().getName());
 			data.setPage(spider.getPageResult());
 			data.setContent(entry.getValue().toString());
+			datas.add(data);
 		}
-		
+		if (!datas.isEmpty()) {
+			SpiderRunResultDataRepository resultDataRepository = spider.getGroup().getService()
+					.getResultDataRepository();
+			resultDataRepository.save(datas);
+		}
+
 	}
 
 }
