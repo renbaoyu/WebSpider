@@ -16,15 +16,15 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "spider_run_log")
-public class SpiderRunLog implements Serializable {
+public class RunLog implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@ManyToOne
 	@JoinColumn(name = "taskid")
 	@JsonBackReference
-	private SpiderTask task;
-	private SpiderExplan explan;
+	private Task task;
+	private Explan explan;
 	private String url;
 	private String contentCharset;
 	private String contentType;
@@ -41,19 +41,19 @@ public class SpiderRunLog implements Serializable {
 		this.id = id;
 	}
 
-	public SpiderTask getTask() {
+	public Task getTask() {
 		return task;
 	}
 
-	public void setTask(SpiderTask task) {
+	public void setTask(Task task) {
 		this.task = task;
 	}
 
-	public SpiderExplan getExplan() {
+	public Explan getExplan() {
 		return explan;
 	}
 
-	public void setExplan(SpiderExplan explan) {
+	public void setExplan(Explan explan) {
 		this.explan = explan;
 	}
 

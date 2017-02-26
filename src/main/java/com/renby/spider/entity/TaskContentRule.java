@@ -14,13 +14,13 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "spider_task_content")
-public class SpiderTaskContentRule implements Serializable {
+public class TaskContentRule implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@ManyToOne
 	@JoinColumn(name = "pageid")
-	private SpiderTaskPageRule page;
+	private TaskPageRule page;
 	private String name;
 	private HtmlMatchRuleType ruleType = HtmlMatchRuleType.Normal;
 	private String ruleExpression;
@@ -34,11 +34,11 @@ public class SpiderTaskContentRule implements Serializable {
 		this.id = id;
 	}
 
-	public SpiderTaskPageRule getPage() {
+	public TaskPageRule getPage() {
 		return page;
 	}
 
-	public void setPage(SpiderTaskPageRule page) {
+	public void setPage(TaskPageRule page) {
 		this.page = page;
 	}
 

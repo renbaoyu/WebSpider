@@ -1,6 +1,9 @@
 package com.renby.spider.controller;
 
-import java.util.List;
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
@@ -11,25 +14,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.renby.spider.entity.SpiderTask;
-import com.renby.spider.entity.SpiderTaskContentRule;
-import com.renby.spider.entity.SpiderTaskPageRule;
-import com.renby.spider.repository.SpiderTaskContentRuleRepository;
-import com.renby.spider.repository.SpiderTaskPageRuleRepository;
-import com.renby.spider.repository.SpiderTaskRepository;
+import com.renby.spider.entity.TaskContentRule;
+import com.renby.spider.repository.TaskContentRuleRepository;
 
 @RestController
 @RequestMapping(TaskContentController.BASE_URL)
-public class TaskContentController {
-	public static final String DEFAULT_PAGE = "0";
-	public static final String DEFAULT_PAGE_SIZE = "20";
+public class TaskContentController extends AbstractController {
 	public static final String BASE_URL = "/spider/task_content";
 	@Autowired
-	private SpiderTaskRepository taskRepository;
-	@Autowired
-	private SpiderTaskPageRuleRepository taskPageRepository;
-	@Autowired
-	private SpiderTaskContentRuleRepository taskContentRepository;
+	private TaskContentRuleRepository taskContentRepository;
 
 	/**
 	 * 新增页面
@@ -41,7 +34,7 @@ public class TaskContentController {
 		ModelMap model = getModel(null);
 		model.addAttribute("pageid", pageid);
 		model.addAttribute("action", BASE_URL + "/new");
-		return new ModelAndView(BASE_URL + "/edit", model);
+		return new ModelAndView(getEditPage(), model);
 	}
 
 	/**
@@ -51,9 +44,11 @@ public class TaskContentController {
 	 * @return
 	 */
 	@RequestMapping(value = "new", method = RequestMethod.POST)
-	public ModelAndView create(SpiderTaskContentRule newTaskContent) {
-		SpiderTaskContentRule savedPage = taskContentRepository.save(newTaskContent);
-		return taskEditPage(savedPage);
+	public ModelAndView create(TaskContentRule newTaskContent, HttpServletResponse response)
+			throws ServletException, IOException {
+		TaskContentRule savedcontent = taskContentRepository.save(newTaskContent);
+		response.sendRedirect("/spider/task_page/view/" + savedcontent.getPage().getId());
+		return null;
 	}
 
 	/**
@@ -64,11 +59,11 @@ public class TaskContentController {
 	 */
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public ModelAndView updatePage(@PathVariable("id") long id) {
-		SpiderTaskContentRule saved = taskContentRepository.findOne(id);
+		TaskContentRule saved = taskContentRepository.findOne(id);
 		ModelMap model = getModel(saved);
 		model.addAttribute("pageid", saved.getPage().getId());
-		model.addAttribute("action", BASE_URL + "/edit");
-		return new ModelAndView(BASE_URL + "/edit", model);
+		model.addAttribute("action", getEditPage());
+		return new ModelAndView(getEditPage(), model);
 	}
 
 	/**
@@ -78,12 +73,12 @@ public class TaskContentController {
 	 * @return
 	 */
 	@RequestMapping(value = "edit", method = RequestMethod.POST)
-	public ModelAndView update(SpiderTaskContentRule modifierdContent) {
-		SpiderTaskContentRule saved = taskContentRepository.save(modifierdContent);
+	public ModelAndView update(TaskContentRule modifierdContent) {
+		TaskContentRule saved = taskContentRepository.save(modifierdContent);
 		ModelMap model = getModel(saved);
 		model.addAttribute("pageid", saved.getPage().getId());
-		model.addAttribute("action", BASE_URL + "/edit");
-		return new ModelAndView(BASE_URL + "/edit", model);
+		model.addAttribute("action", getEditPage());
+		return new ModelAndView(getEditPage(), model);
 	}
 
 	/**
@@ -93,10 +88,12 @@ public class TaskContentController {
 	 * @return
 	 */
 	@RequestMapping("delete/{id}")
-	public ModelAndView delete(@PathVariable("id") Long id) {
-		SpiderTaskContentRule content = taskContentRepository.findOne(id);
+	public ModelAndView delete(@PathVariable("id") Long id, HttpServletResponse response)
+			throws ServletException, IOException {
+		TaskContentRule content = taskContentRepository.findOne(id);
 		taskContentRepository.delete(id);
-		return taskEditPage(content);
+		response.sendRedirect("/spider/task_page/view/" + content.getPage().getId());
+		return null;
 	}
 
 	/**
@@ -105,30 +102,18 @@ public class TaskContentController {
 	 * @param content
 	 * @return
 	 */
-	private ModelAndView taskEditPage(SpiderTaskContentRule content) {
-		SpiderTaskPageRule taskPage = taskPageRepository.findOne(content.getPage().getId());
-		List<SpiderTaskPageRule> taskPageList = taskPageRepository.findByTask(taskPage.getTask());
-		ModelMap model = new ModelMap();
-		SpiderTask task = taskRepository.findOne(taskPage.getTask().getId());
-		model.addAttribute("task", task);
-		model.addAttribute("taskPagelist", taskPageList);
-		return new ModelAndView(TaskController.BASE_URL + "/edit", model);
-	}
-
-	/**
-	 * 爬取任务查看界面
-	 * 
-	 * @param content
-	 * @return
-	 */
-	private ModelMap getModel(SpiderTaskContentRule content) {
+	private ModelMap getModel(TaskContentRule content) {
 		ModelMap model = new ModelMap();
 		if (content != null) {
 			model.addAttribute("content", content);
 		} else {
-			model.addAttribute("content", new SpiderTaskContentRule());
-
+			model.addAttribute("content", new TaskContentRule());
 		}
 		return model;
+	}
+
+	@Override
+	public String getBasePage() {
+		return BASE_URL;
 	}
 }

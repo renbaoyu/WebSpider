@@ -5,62 +5,67 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.renby.spider.entity.SpiderTask;
-import com.renby.spider.entity.SpiderTaskContentRule;
-import com.renby.spider.entity.SpiderTaskPageRule;
+import com.renby.spider.entity.Task;
+import com.renby.spider.entity.TaskContentRule;
+import com.renby.spider.entity.TaskPageRule;
 import com.renby.spider.excutor.SpiderGroup;
 import com.renby.spider.excutor.SuperSpider;
-import com.renby.spider.repository.SpiderRunLogRepository;
-import com.renby.spider.repository.SpiderRunResultDataRepository;
-import com.renby.spider.repository.SpiderRunResultPageRepository;
-import com.renby.spider.repository.SpiderRunResultRepository;
-import com.renby.spider.repository.SpiderTaskContentRuleRepository;
-import com.renby.spider.repository.SpiderTaskPageRuleRepository;
-import com.renby.spider.repository.SpiderTaskRepository;
+import com.renby.spider.repository.RunLogRepository;
+import com.renby.spider.repository.RunResultDataRepository;
+import com.renby.spider.repository.RunResultPageRepository;
+import com.renby.spider.repository.RunResultRepository;
+import com.renby.spider.repository.TaskContentRuleRepository;
+import com.renby.spider.repository.TaskPageRuleRepository;
+import com.renby.spider.repository.TaskRepository;
 import com.renby.spider.service.ISpiderExcuteService;
 
 @Component
 public class SpiderExcuteServiceImpl implements ISpiderExcuteService {
 	@Autowired
-	private SpiderTaskRepository taskRepository;
+	private TaskRepository taskRepository;
 	@Autowired
-	private SpiderTaskPageRuleRepository pageRepository;
+	private TaskPageRuleRepository pageRepository;
 	@Autowired
-	private SpiderTaskContentRuleRepository contentRepository;
+	private TaskContentRuleRepository contentRepository;
 	@Autowired
-	private SpiderRunLogRepository runLogRepository;
+	private RunLogRepository runLogRepository;
 	@Autowired
-	private SpiderRunResultRepository resultRepository;
+	private RunResultRepository resultRepository;
 	@Autowired
-	private SpiderRunResultPageRepository resultPageRepository;
+	private RunResultPageRepository resultPageRepository;
 	@Autowired
-	private SpiderRunResultDataRepository resultDataRepository;
+	private RunResultDataRepository resultDataRepository;
 
 	public void runTask(long id) {
-		SpiderTask task = taskRepository.getOne(id);
-		List<SpiderTaskPageRule> pages = pageRepository.findByTask(task);
+		Task task = taskRepository.getOne(id);
+		List<TaskPageRule> pages = pageRepository.findByTask(task);
 		SpiderGroup group = new SpiderGroup(task, this);
-		for (SpiderTaskPageRule page : pages) {
-			List<SpiderTaskContentRule> contents = contentRepository.findByPage(page);
+		for (TaskPageRule page : pages) {
+			List<TaskContentRule> contents = contentRepository.findByPage(page);
 			SuperSpider spider = SuperSpider.createSpider(task, page, contents);
-			group.addSpider(spider);
+			if(page.isStartPage()){
+				spider.addUrl(task.getStartUrl());
+				group.setStartSpider(spider);
+			}else{
+				group.addSpider(spider);
+			}
 		}
 		group.start();
 	}
 
-	public SpiderRunLogRepository getRunLogRepository() {
+	public RunLogRepository getRunLogRepository() {
 		return runLogRepository;
 	}
 
-	public SpiderRunResultRepository getResultRepository() {
+	public RunResultRepository getResultRepository() {
 		return resultRepository;
 	}
 
-	public SpiderRunResultPageRepository getResultPageRepository() {
+	public RunResultPageRepository getResultPageRepository() {
 		return resultPageRepository;
 	}
 
-	public SpiderRunResultDataRepository getResultDataRepository() {
+	public RunResultDataRepository getResultDataRepository() {
 		return resultDataRepository;
 	}
 }

@@ -5,11 +5,11 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.renby.spider.entity.SpiderExplan;
-import com.renby.spider.entity.SpiderRunResultPage;
-import com.renby.spider.entity.SpiderTask;
-import com.renby.spider.entity.SpiderTaskContentRule;
-import com.renby.spider.entity.SpiderTaskPageRule;
+import com.renby.spider.entity.Explan;
+import com.renby.spider.entity.RunResultPage;
+import com.renby.spider.entity.Task;
+import com.renby.spider.entity.TaskContentRule;
+import com.renby.spider.entity.TaskPageRule;
 import com.renby.spider.excutor.downloader.HttpClientFileDownloader;
 import com.renby.spider.excutor.pipeline.DataBasePipeline;
 import com.renby.spider.excutor.processor.SpiderTaskProcessor;
@@ -23,16 +23,16 @@ import us.codecraft.webmagic.utils.UrlUtils;
 public class SuperSpider extends Spider {
 	private Spider spider;
 	private SpiderGroup group;
-	private SpiderTask task;
-	private SpiderExplan explan;
-	private SpiderTaskPageRule pageRule;
-	private SpiderRunResultPage pageResult;
+	private Task task;
+	private Explan explan;
+	private TaskPageRule pageRule;
+	private RunResultPage pageResult;
 
 	public SuperSpider(PageProcessor pageProcessor) {
 		super(pageProcessor);
 	}
 
-	public SuperSpider(SpiderTaskProcessor pageProcessor, SpiderTask task, SpiderTaskPageRule pageRule) {
+	public SuperSpider(SpiderTaskProcessor pageProcessor, Task task, TaskPageRule pageRule) {
 		super(pageProcessor);
 		this.task = task;
 		this.pageRule = pageRule;
@@ -42,8 +42,8 @@ public class SuperSpider extends Spider {
 		this.setUUID(task.getName() + (pageRule == null ? "" : ":" + pageRule.getName()));
 	}
 
-	public static SuperSpider createSpider(SpiderTask task, SpiderTaskPageRule pageRule,
-			List<SpiderTaskContentRule> contentRules) {
+	public static SuperSpider createSpider(Task task, TaskPageRule pageRule,
+			List<TaskContentRule> contentRules) {
 		SpiderTaskProcessor pageProcessor = new SpiderTaskProcessor(contentRules);
 		return new SuperSpider(pageProcessor, task, pageRule);
 	}
@@ -70,7 +70,7 @@ public class SuperSpider extends Spider {
 	@Override
 	protected void initComponent() {
 		super.initComponent();
-		pageResult = new SpiderRunResultPage();
+		pageResult = new RunResultPage();
 		pageResult.setResult(group.getResult());
 		if(pageRule == null){
 			pageResult.setName(task.getName() + "任务首页面");
@@ -80,11 +80,11 @@ public class SuperSpider extends Spider {
 		group.getService().getResultPageRepository().save(pageResult);
 	}
 
-	public SpiderTaskPageRule getPageRule() {
+	public TaskPageRule getPageRule() {
 		return pageRule;
 	}
 
-	public SpiderExplan getExplan() {
+	public Explan getExplan() {
 		return explan;
 	}
 
@@ -92,11 +92,11 @@ public class SuperSpider extends Spider {
 		return spider;
 	}
 
-	public SpiderTask getTask() {
+	public Task getTask() {
 		return task;
 	}
 
-	public SpiderRunResultPage getPageResult() {
+	public RunResultPage getPageResult() {
 		return pageResult;
 	}
 

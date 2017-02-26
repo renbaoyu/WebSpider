@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.renby.spider.entity.SpiderRunResultData;
-import com.renby.spider.entity.SpiderTaskContentRule;
+import com.renby.spider.entity.RunResultData;
+import com.renby.spider.entity.TaskContentRule;
 import com.renby.spider.excutor.ExtendResultItems;
 import com.renby.spider.excutor.SuperSpider;
-import com.renby.spider.repository.SpiderRunResultDataRepository;
+import com.renby.spider.repository.RunResultDataRepository;
 
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
@@ -27,16 +27,16 @@ public class DataBasePipeline implements Pipeline {
 	public void process(ResultItems resultItems, Task task) {
 		ExtendResultItems items = (ExtendResultItems) resultItems;
 		SuperSpider spider = (SuperSpider) task;
-		List<SpiderRunResultData> datas = new ArrayList<SpiderRunResultData>();
-		for (Entry<SpiderTaskContentRule, Object> entry : items.getRuleResult().entrySet()) {
-			SpiderRunResultData data = new SpiderRunResultData();
+		List<RunResultData> datas = new ArrayList<RunResultData>();
+		for (Entry<TaskContentRule, Object> entry : items.getRuleResult().entrySet()) {
+			RunResultData data = new RunResultData();
 			data.setName(entry.getKey().getName());
 			data.setPage(spider.getPageResult());
 			data.setContent(entry.getValue().toString());
 			datas.add(data);
 		}
 		if (!datas.isEmpty()) {
-			SpiderRunResultDataRepository resultDataRepository = spider.getGroup().getService()
+			RunResultDataRepository resultDataRepository = spider.getGroup().getService()
 					.getResultDataRepository();
 			resultDataRepository.save(datas);
 		}

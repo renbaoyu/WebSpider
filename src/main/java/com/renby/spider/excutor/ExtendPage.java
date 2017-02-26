@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.renby.spider.entity.SpiderTaskContentRule;
+import com.renby.spider.entity.TaskContentRule;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
@@ -61,7 +61,7 @@ public class ExtendPage extends Page{
         resultItems.put(key, field);
     }
 
-    public void putRuleResult(SpiderTaskContentRule key, Object value) {
+    public void putRuleResult(TaskContentRule key, Object value) {
         resultItems.putRuleResult(key, value);
     }
 

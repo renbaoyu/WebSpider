@@ -23,8 +23,9 @@
 				<td><a th:href="@{'/spider/task/edit/' + ${item.id}}">修改</a> <a
 					th:href="@{'/spider/task/delete/' + ${item.id}}">删除</a><a
 					th:href="@{'/spider/task/run/' + ${item.id}}">立即执行</a></td>
-				<td th:text="${item.name}"></td>
-				<td th:text="${item.startUrl}"></td>
+				<td><a th:href="@{'/spider/task/view/' + ${item.id}}"
+					th:text="${item.name}"></a></td>
+				<td><a th:href="${item.startUrl}" th:text="${item.startUrl}" target="_blank"></a></td>
 				<td th:text="${item.finishedMode.name}"></td>
 				<td th:text="${item.remarks}"></td>
 			</tr>

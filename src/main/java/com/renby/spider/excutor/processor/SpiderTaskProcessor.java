@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.renby.spider.entity.HtmlMatchRuleType;
-import com.renby.spider.entity.SpiderRunLog;
-import com.renby.spider.entity.SpiderTaskContentRule;
+import com.renby.spider.entity.RunLog;
+import com.renby.spider.entity.TaskContentRule;
 import com.renby.spider.excutor.ExtendPage;
 import com.renby.spider.excutor.SpiderGroup;
 import com.renby.spider.excutor.SuperSpider;
@@ -18,16 +18,16 @@ import us.codecraft.webmagic.selector.Html;
 
 public class SpiderTaskProcessor implements PageProcessor {
 	private SpiderGroup spiderGroup;
-	private List<SpiderTaskContentRule> contentRules;
+	private List<TaskContentRule> contentRules;
 
-	public SpiderTaskProcessor(List<SpiderTaskContentRule> contentRules) {
+	public SpiderTaskProcessor(List<TaskContentRule> contentRules) {
 		this.contentRules = contentRules;
 	}
 
 	@Override
 	public void process(Page page) {
 		ExtendPage exPage = (ExtendPage) page;
-		for (SpiderTaskContentRule contentRule : contentRules) {
+		for (TaskContentRule contentRule : contentRules) {
 			List<String> values = excuteMatch(contentRule.getRuleType(), contentRule.getRuleExpression(),
 					exPage.getHtml(), false);
 			if (values != null && !values.isEmpty()) {
@@ -101,7 +101,7 @@ public class SpiderTaskProcessor implements PageProcessor {
 	}
 
 	private void saveRunLog(ExtendPage exPage) {
-		SpiderRunLog log = new SpiderRunLog();
+		RunLog log = new RunLog();
 		log.setContent(exPage.getContentBytes());
 		log.setContentType(exPage.getContentType());
 		log.setContentCharset(exPage.getContentCharset());

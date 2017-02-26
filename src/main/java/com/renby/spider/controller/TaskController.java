@@ -1,6 +1,9 @@
 package com.renby.spider.controller;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
@@ -14,22 +17,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.renby.spider.entity.SpiderTask;
-import com.renby.spider.entity.SpiderTaskPageRule;
-import com.renby.spider.repository.SpiderTaskPageRuleRepository;
-import com.renby.spider.repository.SpiderTaskRepository;
+import com.renby.spider.entity.Task;
+import com.renby.spider.entity.TaskPageRule;
+import com.renby.spider.repository.TaskPageRuleRepository;
+import com.renby.spider.repository.TaskRepository;
 import com.renby.spider.service.ISpiderExcuteService;
 
 @RestController
 @RequestMapping(TaskController.BASE_URL)
-public class TaskController {
-	public static final String DEFAULT_PAGE = "0";
-	public static final String DEFAULT_PAGE_SIZE = "20";
+public class TaskController extends AbstractController {
 	public static final String BASE_URL = "/spider/task";
 	@Autowired
-	private SpiderTaskRepository taskRepository;
+	private TaskRepository taskRepository;
 	@Autowired
-	private SpiderTaskPageRuleRepository taskPageRepository;
+	private TaskPageRuleRepository taskPageRepository;
 	@Autowired
 	private ISpiderExcuteService excuteService;
 
@@ -43,11 +44,11 @@ public class TaskController {
 	 */
 	@RequestMapping({ "", "list" })
 	public ModelAndView list(@RequestParam(value = "s", required = false) String s,
-			@RequestParam(value = "page", required = false, defaultValue = DEFAULT_PAGE) int page,
-			@RequestParam(value = "pagesize", required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize) {
-		List<SpiderTask> tasks = null;
+			@RequestParam(value = "page", required = false, defaultValue = LIST_DEFAULT_PAGE) int page,
+			@RequestParam(value = "pagesize", required = false, defaultValue = LIST_DEFAULT_PAGE_SIZE) int pageSize) {
+		List<Task> tasks = null;
 		if (StringUtils.isEmpty(s)) {
-			PageImpl<SpiderTask> pageData = (PageImpl<SpiderTask>) taskRepository
+			PageImpl<Task> pageData = (PageImpl<Task>) taskRepository
 					.findAll(new PageRequest(page, pageSize));
 			tasks = pageData.getContent();
 		} else {
@@ -55,7 +56,7 @@ public class TaskController {
 		}
 		ModelMap model = new ModelMap();
 		model.addAttribute("tasklist", tasks);
-		return new ModelAndView(BASE_URL + "/list", model);
+		return new ModelAndView(getListPage(), model);
 	}
 
 	/**
@@ -65,10 +66,10 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping("view/{id}")
-	public ModelAndView view(@PathVariable("id") long id) {
-		SpiderTask task = taskRepository.findOne(id);
+	public ModelAndView viewPage(@PathVariable("id") long id) {
+		Task task = taskRepository.findOne(id);
 		ModelMap model = getModel(task);
-		return new ModelAndView(BASE_URL + "/view", model);
+		return new ModelAndView(getViewPage(), model);
 	}
 
 	/**
@@ -80,7 +81,7 @@ public class TaskController {
 	public ModelAndView createPage() {
 		ModelMap model = getModel(null);
 		model.addAttribute("action", BASE_URL + "/new");
-		return new ModelAndView(BASE_URL + "/edit", model);
+		return new ModelAndView(getEditPage(), model);
 	}
 
 	/**
@@ -90,9 +91,14 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping(value = "new", method = RequestMethod.POST)
-	public ModelAndView create(SpiderTask newTask) {
+	public ModelAndView create(Task newTask) {
 		taskRepository.save(newTask);
-		return list(null, Integer.valueOf(DEFAULT_PAGE), Integer.valueOf(DEFAULT_PAGE_SIZE));
+		TaskPageRule startPage = new TaskPageRule();
+		startPage.setTask(newTask);
+		startPage.setStartPage(true);
+		startPage.setName("任务首页");
+		taskPageRepository.save(startPage);
+		return list(null, Integer.valueOf(LIST_DEFAULT_PAGE), Integer.valueOf(LIST_DEFAULT_PAGE_SIZE));
 	}
 
 	/**
@@ -103,10 +109,10 @@ public class TaskController {
 	 */
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public ModelAndView updatePage(@PathVariable("id") long id) {
-		SpiderTask task = taskRepository.findOne(id);
+		Task task = taskRepository.findOne(id);
 		ModelMap model = getModel(task);
-		model.addAttribute("action", BASE_URL + "/edit");
-		return new ModelAndView(BASE_URL + "/edit", model);
+		model.addAttribute("action", getEditPage());
+		return new ModelAndView(getEditPage(), model);
 	}
 
 	/**
@@ -116,11 +122,11 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping(value = "edit", method = RequestMethod.POST)
-	public ModelAndView update(SpiderTask modifierdTask) {
-		SpiderTask saved = taskRepository.save(modifierdTask);
+	public ModelAndView update(Task modifierdTask) {
+		Task saved = taskRepository.save(modifierdTask);
 		ModelMap model = getModel(saved);
-		model.addAttribute("action", BASE_URL + "/edit");
-		return new ModelAndView(BASE_URL + "/edit", model);
+		model.addAttribute("action", getEditPage());
+		return new ModelAndView(getEditPage(), model);
 	}
 
 	/**
@@ -132,7 +138,7 @@ public class TaskController {
 	@RequestMapping("delete/{id}")
 	public ModelAndView delete(@PathVariable("id") Long id) {
 		taskRepository.delete(id);
-		return list(null, Integer.valueOf(DEFAULT_PAGE), Integer.valueOf(DEFAULT_PAGE_SIZE));
+		return list(null, Integer.valueOf(LIST_DEFAULT_PAGE), Integer.valueOf(LIST_DEFAULT_PAGE_SIZE));
 	}
 
 	/**
@@ -140,11 +146,13 @@ public class TaskController {
 	 * 
 	 * @param id
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping("run/{id}")
-	public ModelAndView run(@PathVariable("id") Long id) {
+	public ModelAndView run(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {
 		excuteService.runTask(id);
-		return list(null, Integer.valueOf(DEFAULT_PAGE), Integer.valueOf(DEFAULT_PAGE_SIZE));
+		response.sendRedirect(getListPage());
+		return null;
 	}
 
 	/**
@@ -153,17 +161,22 @@ public class TaskController {
 	 * @param page
 	 * @return
 	 */
-	private ModelMap getModel(SpiderTask task) {
+	private ModelMap getModel(Task task) {
 		ModelMap model = new ModelMap();
 		if (task != null) {
-			List<SpiderTaskPageRule> taskPageList = taskPageRepository.findByTask(task);
+			List<TaskPageRule> taskPageList = taskPageRepository.findByTask(task);
 			model.addAttribute("task", task);
 			model.addAttribute("taskPagelist", taskPageList);
 		} else {
-			model.addAttribute("task", new SpiderTask());
-			model.addAttribute("taskPagelist", new SpiderTaskPageRule());
+			model.addAttribute("task", new Task());
+			model.addAttribute("taskPagelist", new TaskPageRule());
 
 		}
 		return model;
+	}
+
+	@Override
+	public String getBasePage() {
+		return BASE_URL;
 	}
 }

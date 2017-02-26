@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "spider_explan")
-public class SpiderExplan implements Serializable {
+public class Explan implements Serializable {
 	enum ExplanStatus {
 		NOT_START("未开始"), RUNNING("进行中"), INTERRUPTED("已中断"), SUSPEND("已暂停"), FINISHED("已完成");
 
@@ -37,7 +37,7 @@ public class SpiderExplan implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "taskid")
 	@JsonBackReference
-	private SpiderTask task;
+	private Task task;
 	private Date startTime;
 	private Date runTimeStart;
 	private Date runTimeEnd;
@@ -118,11 +118,11 @@ public class SpiderExplan implements Serializable {
 		this.remarks = remarks;
 	}
 
-	public SpiderTask getTask() {
+	public Task getTask() {
 		return task;
 	}
 
-	public void setTask(SpiderTask task) {
+	public void setTask(Task task) {
 		this.task = task;
 	}
 

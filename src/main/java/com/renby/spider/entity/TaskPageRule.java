@@ -14,12 +14,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "spider_task_rule")
-public class SpiderTaskPageRule implements Serializable {
-	public SpiderTask getTask() {
+public class TaskPageRule implements Serializable {
+	public Task getTask() {
 		return task;
 	}
 
-	public void setTask(SpiderTask task) {
+	public void setTask(Task task) {
 		this.task = task;
 	}
 
@@ -28,10 +28,11 @@ public class SpiderTaskPageRule implements Serializable {
 	private Long id;
 	@ManyToOne
 	@JoinColumn(name = "taskid")
-	private SpiderTask task;
+	private Task task;
 	private String name;
 	private HtmlMatchRuleType urlRuleType = HtmlMatchRuleType.Normal;
 	private String urlRuleExpression;
+	private boolean startPage = false;
 	private boolean target;
 
 	public Long getId() {
@@ -72,5 +73,13 @@ public class SpiderTaskPageRule implements Serializable {
 
 	public void setTarget(boolean target) {
 		this.target = target;
+	}
+
+	public boolean isStartPage() {
+		return startPage;
+	}
+
+	public void setStartPage(boolean startPage) {
+		this.startPage = startPage;
 	}
 }

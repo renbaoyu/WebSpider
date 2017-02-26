@@ -6,9 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.renby.spider.entity.SpiderTask;
+import com.renby.spider.entity.Task;
 
 @Repository
-public interface SpiderTaskRepository extends JpaRepository<SpiderTask,Long>{
-	public List<SpiderTask> findByNameLike(String name, Pageable pageable);
+public interface TaskRepository extends JpaRepository<Task,Long>{
+	public List<Task> findByNameLike(String name, Pageable pageable);
 }

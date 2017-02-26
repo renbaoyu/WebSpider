@@ -14,14 +14,14 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "spider_run_result_data")
-public class SpiderRunResultData implements Serializable {
+public class RunResultData implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@ManyToOne
 	@JoinColumn(name = "pageid")
 	@JsonBackReference
-	private SpiderRunResultPage page;
+	private RunResultPage page;
 	private String name;
 	private String content;
 
@@ -33,11 +33,11 @@ public class SpiderRunResultData implements Serializable {
 		this.id = id;
 	}
 
-	public SpiderRunResultPage getPage() {
+	public RunResultPage getPage() {
 		return page;
 	}
 
-	public void setPage(SpiderRunResultPage page) {
+	public void setPage(RunResultPage page) {
 		this.page = page;
 	}
 

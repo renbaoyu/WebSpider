@@ -1,6 +1,10 @@
 package com.renby.spider.controller;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
@@ -11,25 +15,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.renby.spider.entity.SpiderTask;
-import com.renby.spider.entity.SpiderTaskContentRule;
-import com.renby.spider.entity.SpiderTaskPageRule;
-import com.renby.spider.repository.SpiderTaskContentRuleRepository;
-import com.renby.spider.repository.SpiderTaskPageRuleRepository;
-import com.renby.spider.repository.SpiderTaskRepository;
+import com.renby.spider.entity.TaskContentRule;
+import com.renby.spider.entity.TaskPageRule;
+import com.renby.spider.repository.TaskContentRuleRepository;
+import com.renby.spider.repository.TaskPageRuleRepository;
 
 @RestController
 @RequestMapping(TaskPageController.BASE_URL)
-public class TaskPageController {
-	public static final String DEFAULT_PAGE = "0";
-	public static final String DEFAULT_PAGE_SIZE = "20";
+public class TaskPageController extends AbstractController {
 	public static final String BASE_URL = "/spider/task_page";
 	@Autowired
-	private SpiderTaskRepository taskRepository;
+	private TaskPageRuleRepository taskPageRepository;
 	@Autowired
-	private SpiderTaskPageRuleRepository taskPageRepository;
-	@Autowired
-	private SpiderTaskContentRuleRepository taskContentRepository;
+	private TaskContentRuleRepository taskContentRepository;
 
 	/**
 	 * 新增页面
@@ -41,7 +39,7 @@ public class TaskPageController {
 		ModelMap model = getModel(null);
 		model.addAttribute("taskid", taskid);
 		model.addAttribute("action", BASE_URL + "/new");
-		return new ModelAndView(BASE_URL + "/edit", model);
+		return new ModelAndView(getEditPage(), model);
 	}
 
 	/**
@@ -51,9 +49,24 @@ public class TaskPageController {
 	 * @return
 	 */
 	@RequestMapping(value = "new", method = RequestMethod.POST)
-	public ModelAndView create(SpiderTaskPageRule newTaskPage) {
-		SpiderTaskPageRule savedPage = taskPageRepository.save(newTaskPage);
-		return taskEditPage(savedPage);
+	public ModelAndView create(TaskPageRule newTaskPage, HttpServletResponse response) throws ServletException, IOException {
+		TaskPageRule savedPage = taskPageRepository.save(newTaskPage);
+		response.sendRedirect("/spider/task/view/" + savedPage.getTask().getId());
+		return null;
+	}
+
+	/**
+	 * 修改页面
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "view/{id}", method = RequestMethod.GET)
+	public ModelAndView viewPage(@PathVariable("id") long id) {
+		TaskPageRule saved = taskPageRepository.findOne(id);
+		ModelMap model = getModel(saved);
+		model.addAttribute("action", getViewPage());
+		return new ModelAndView(getViewPage(), model);
 	}
 
 	/**
@@ -64,11 +77,11 @@ public class TaskPageController {
 	 */
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public ModelAndView updatePage(@PathVariable("id") long id) {
-		SpiderTaskPageRule saved = taskPageRepository.findOne(id);
+		TaskPageRule saved = taskPageRepository.findOne(id);
 		ModelMap model = getModel(saved);
 		model.addAttribute("taskid", saved.getTask().getId());
-		model.addAttribute("action", BASE_URL + "/edit");
-		return new ModelAndView(BASE_URL + "/edit", model);
+		model.addAttribute("action", getEditPage());
+		return new ModelAndView(getEditPage(), model);
 	}
 
 	/**
@@ -78,12 +91,12 @@ public class TaskPageController {
 	 * @return
 	 */
 	@RequestMapping(value = "edit", method = RequestMethod.POST)
-	public ModelAndView update(SpiderTaskPageRule modifierdTask) {
-		SpiderTaskPageRule saved = taskPageRepository.save(modifierdTask);
+	public ModelAndView update(TaskPageRule modifierdTask) {
+		TaskPageRule saved = taskPageRepository.save(modifierdTask);
 		ModelMap model = getModel(saved);
 		model.addAttribute("taskid", saved.getTask().getId());
-		model.addAttribute("action", BASE_URL + "/edit");
-		return new ModelAndView(BASE_URL + "/edit", model);
+		model.addAttribute("action", getEditPage());
+		return new ModelAndView(getEditPage(), model);
 	}
 
 	/**
@@ -91,12 +104,15 @@ public class TaskPageController {
 	 * 
 	 * @param id
 	 * @return
+	 * @throws IOException 
+	 * @throws ServletException 
 	 */
 	@RequestMapping("delete/{id}")
-	public ModelAndView delete(@PathVariable("id") Long id) {
-		SpiderTaskPageRule page = taskPageRepository.findOne(id);
+	public ModelAndView delete(@PathVariable("id") Long id, HttpServletResponse response) throws ServletException, IOException {
+		TaskPageRule page = taskPageRepository.findOne(id);
 		taskPageRepository.delete(id);
-		return taskEditPage(page);
+		response.sendRedirect("/spider/task/view/" + page.getTask().getId());
+		return null;
 	}
 
 	/**
@@ -105,32 +121,22 @@ public class TaskPageController {
 	 * @param page
 	 * @return
 	 */
-	private ModelAndView taskEditPage(SpiderTaskPageRule page) {
-		List<SpiderTaskPageRule> taskPageList = taskPageRepository.findByTask(page.getTask());
-		ModelMap model = new ModelMap();
-		SpiderTask task = taskRepository.findOne(page.getTask().getId());
-		model.addAttribute("task", task);
-		model.addAttribute("taskPagelist", taskPageList);
-		return new ModelAndView(TaskController.BASE_URL + "/edit", model);
-	}
-
-	/**
-	 * 爬取任务查看界面
-	 * 
-	 * @param page
-	 * @return
-	 */
-	private ModelMap getModel(SpiderTaskPageRule page) {
+	private ModelMap getModel(TaskPageRule page) {
 		ModelMap model = new ModelMap();
 		if (page != null) {
-			List<SpiderTaskContentRule> taskContentList = taskContentRepository.findByPage(page);
+			List<TaskContentRule> taskContentList = taskContentRepository.findByPage(page);
 			model.addAttribute("page", page);
 			model.addAttribute("taskContentlist", taskContentList);
 		} else {
-			model.addAttribute("page", new SpiderTaskPageRule());
-			model.addAttribute("taskContentlist", new SpiderTaskContentRule());
+			model.addAttribute("page", new TaskPageRule());
+			model.addAttribute("taskContentlist", new TaskContentRule());
 
 		}
 		return model;
+	}
+
+	@Override
+	public String getBasePage() {
+		return BASE_URL;
 	}
 }

@@ -5,39 +5,36 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-import com.renby.spider.entity.SpiderExplan;
-import com.renby.spider.entity.SpiderRunResult;
-import com.renby.spider.entity.SpiderTask;
-import com.renby.spider.entity.SpiderTaskContentRule;
+import com.renby.spider.entity.Explan;
+import com.renby.spider.entity.RunResult;
+import com.renby.spider.entity.Task;
+import com.renby.spider.entity.TaskContentRule;
 import com.renby.spider.service.impl.SpiderExcuteServiceImpl;
 
 import us.codecraft.webmagic.scheduler.MonitorableScheduler;
 
 public class SpiderGroup {
 	private static final Set<SpiderGroup> groups = new ConcurrentSkipListSet<SpiderGroup>();
-	private SpiderTask task;
-	private SpiderExplan explan;
+	private Task task;
+	private Explan explan;
 	private SuperSpider startSpider;
 	private final List<SuperSpider> spiders = new ArrayList<SuperSpider>();
 	private SpiderExcuteServiceImpl service;
-	private SpiderRunResult result;
+	private RunResult result;
 
-	public SpiderGroup(SpiderTask task, SpiderExcuteServiceImpl service) {
+	public SpiderGroup(Task task, SpiderExcuteServiceImpl service) {
 		this.task = task;
 		this.service = service;
-		this.startSpider = SuperSpider.createSpider(task, null, new ArrayList<SpiderTaskContentRule>());
-		this.startSpider.addUrl(task.getStartUrl());
-		this.startSpider.setGroup(this);
-		this.result = new SpiderRunResult();
+		this.result = new RunResult();
 		this.result.setName(task.getName());
 	}
 
-	public SpiderGroup(SpiderExplan explan, SpiderExcuteServiceImpl service) {
+	public SpiderGroup(Explan explan, SpiderExcuteServiceImpl service) {
 		this.explan = explan;
 		this.task = explan.getTask();
 		this.service = service;
-		this.startSpider = SuperSpider.createSpider(task, null, new ArrayList<SpiderTaskContentRule>());
-		this.startSpider.setGroup(this);
+		this.result = new RunResult();
+		this.result.setName(task.getName());
 	}
 
 	public void addSpider(SuperSpider spider) {
@@ -49,11 +46,11 @@ public class SpiderGroup {
 		return groups;
 	}
 
-	public SpiderTask getTask() {
+	public Task getTask() {
 		return task;
 	}
 
-	public SpiderExplan getExplan() {
+	public Explan getExplan() {
 		return explan;
 	}
 
@@ -65,29 +62,35 @@ public class SpiderGroup {
 		return service;
 	}
 
-	public SpiderRunResult getResult() {
+	public RunResult getResult() {
 		return result;
 	}
 
 	public void stop() {
+		startSpider.stop();
 		for (SuperSpider spider : spiders) {
 			spider.stop();
 		}
 	}
 
 	public void start() {
+		assert startSpider != null;
 		startSpider.start();
 		for (SuperSpider spider : spiders) {
 			spider.setExitWhenComplete(false);
 			spider.start();
 		}
 		service.getResultRepository().save(result);
-//		service.getResultRepository().flush();
 		new RunStatusListener(this).start();
 	}
 
 	public SuperSpider getStartSpider() {
 		return startSpider;
+	}
+
+	public void setStartSpider(SuperSpider startSpider) {
+		this.startSpider = startSpider;
+		this.startSpider.setGroup(this);
 	}
 
 	class RunStatusListener extends Thread {
@@ -109,7 +112,6 @@ public class SpiderGroup {
 					throw new RuntimeException("任务被中断", e);
 				}
 			}
-			group.getStartSpider().stop();
 			group.stop();
 
 		}

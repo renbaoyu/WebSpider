@@ -6,9 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.renby.spider.entity.SpiderRunResultData;
+import com.renby.spider.entity.RunResult;
 
 @Repository
-public interface SpiderRunResultDataRepository extends JpaRepository<SpiderRunResultData,Long>{
-	public List<SpiderRunResultData> findByNameLike(String name, Pageable pageable);
+public interface RunResultRepository extends JpaRepository<RunResult,Long>{
+	public List<RunResult> findByNameLike(String name, Pageable pageable);
 }

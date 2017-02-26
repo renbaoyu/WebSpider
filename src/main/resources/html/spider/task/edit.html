@@ -23,30 +23,5 @@
 		</ul>
 		<input type="submit" value="提交" /> <a href="/spider/task/list">返回</a>
 	</form>
-	<label>页面规则设置</label>
-	<a th:href="@{'/spider/task_page/new?task=' + ${task.id}}">新增</a>
-	<table>
-		<thead>
-			<tr>
-				<th>序号</th>
-				<th>操作</th>
-				<th>页面名称</th>
-				<th>页面URL表达式类型</th>
-				<th>页面URL表达式</th>
-				<th>是否目标页面</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="item:${taskPagelist}">
-				<td th:text="${itemStat.count}">1</td>
-				<td><a th:href="@{'/spider/task_page/edit/' + ${item.id}}">修改</a>
-					<a th:href="@{'/spider/task_page/delete/' + ${item.id}}">删除</a></td>
-				<td th:text="${item.name}"></td>
-				<td th:text="${item.urlRuleType.name}"></td>
-				<td th:text="${item.urlRuleExpression}"></td>
-				<td th:text="${item.target}"></td>
-			</tr>
-		</tbody>
-	</table>
 </body>
 </html>
