@@ -1,11 +1,9 @@
 package com.renby.spider.excutor.processor;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.renby.spider.entity.HtmlMatchRuleType;
-import com.renby.spider.entity.RunLog;
 import com.renby.spider.entity.TaskContentRule;
 import com.renby.spider.excutor.ExtendPage;
 import com.renby.spider.excutor.SpiderGroup;
@@ -41,7 +39,7 @@ public class SpiderTaskProcessor implements PageProcessor {
 				exPage.putNewURL(spider, values);
 			}
 		}
-		saveRunLog(exPage);
+		spiderGroup.getService().onPageProcessed(spiderGroup.getTask(), spiderGroup.getExplan(), exPage);
 	}
 
 	@Override
@@ -54,7 +52,7 @@ public class SpiderTaskProcessor implements PageProcessor {
 	}
 
 	private List<String> excuteMatch(HtmlMatchRuleType type, String expresion, Html html, boolean isUrl) {
-		if(isUrl){
+		if (isUrl) {
 			switch (type) {
 			case Normal:
 				List<String> matched = new ArrayList<String>();
@@ -75,7 +73,7 @@ public class SpiderTaskProcessor implements PageProcessor {
 			default:
 				throw new RuntimeException("表达式类型不可为空");
 			}
-		}else{
+		} else {
 			switch (type) {
 			case Normal:
 				List<String> matched = new ArrayList<String>();
@@ -97,19 +95,5 @@ public class SpiderTaskProcessor implements PageProcessor {
 				throw new RuntimeException("表达式类型不可为空");
 			}
 		}
-
-	}
-
-	private void saveRunLog(ExtendPage exPage) {
-		RunLog log = new RunLog();
-		log.setContent(exPage.getContentBytes());
-		log.setContentType(exPage.getContentType());
-		log.setContentCharset(exPage.getContentCharset());
-		log.setTask(spiderGroup.getTask());
-		log.setExplan(spiderGroup.getExplan());
-		log.setFinishedTime(new Date());
-		log.setUrl(exPage.getUrl().get());
-		log.setStateCode(exPage.getStatusCode());
-		spiderGroup.getService().getRunLogRepository().save(log);
 	}
 }

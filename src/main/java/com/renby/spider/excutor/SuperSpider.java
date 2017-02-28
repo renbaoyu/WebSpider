@@ -11,12 +11,12 @@ import com.renby.spider.entity.Task;
 import com.renby.spider.entity.TaskContentRule;
 import com.renby.spider.entity.TaskPageRule;
 import com.renby.spider.excutor.downloader.HttpClientFileDownloader;
-import com.renby.spider.excutor.pipeline.DataBasePipeline;
 import com.renby.spider.excutor.processor.SpiderTaskProcessor;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.utils.UrlUtils;
 
@@ -38,8 +38,8 @@ public class SuperSpider extends Spider {
 		this.pageRule = pageRule;
 		super.exitWhenComplete = false;
 		this.downloader = new HttpClientFileDownloader();
-		this.pipelines.add(new DataBasePipeline());
 		this.setUUID(task.getName() + (pageRule == null ? "" : ":" + pageRule.getName()));
+		this.setEmptySleepTime(1000);
 	}
 
 	public static SuperSpider createSpider(Task task, TaskPageRule pageRule,
@@ -61,23 +61,42 @@ public class SuperSpider extends Spider {
 						continue;
 					}
 					url = UrlUtils.canonicalizeUrl(url, exPage.getUrl().toString());
-					spider.getScheduler().push(new Request(url), spider);
+					spider.getScheduler().push(new ExtendRequest(url,exPage.getUrl().get()), spider);
 				}
 			}
 		}
 	}
 
 	@Override
+    protected void processRequest(Request request) {
+        Page page = downloader.download(request, this);
+        if (page == null) {
+            sleep(site.getSleepTime());
+            onError(request);
+            return;
+        }
+        // for cycle retry
+        if (page.isNeedCycleRetry()) {
+            extractAndAddRequests(page, true);
+            sleep(site.getRetrySleepTime());
+            return;
+        }
+        pageProcessor.process(page);
+        extractAndAddRequests(page, spawnUrl);
+        if (!page.getResultItems().isSkip()) {
+        	group.getService().onPipeLine(this, (ExtendResultItems) page.getResultItems());
+            for (Pipeline pipeline : pipelines) {
+                pipeline.process(page.getResultItems(), this);
+            }
+        }
+        //for proxy status management
+        request.putExtra(Request.STATUS_CODE, page.getStatusCode());
+        sleep(site.getSleepTime());
+    }
+
+	@Override
 	protected void initComponent() {
 		super.initComponent();
-		pageResult = new RunResultPage();
-		pageResult.setResult(group.getResult());
-		if(pageRule == null){
-			pageResult.setName(task.getName() + "任务首页面");
-		}else{
-			pageResult.setName(pageRule.getName());
-		}
-		group.getService().getResultPageRepository().save(pageResult);
 	}
 
 	public TaskPageRule getPageRule() {

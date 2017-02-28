@@ -3,7 +3,6 @@ package com.renby.spider.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,8 +14,22 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "spider_run_log")
-public class RunLog implements Serializable {
+@Table(name = "spider_task_progress")
+public class TaskProgress implements Serializable {
+	public enum TaskStatus {
+		NOTSTART("未开始"), RUNNING("正在执行中"), PAUSE("暂停中"), FINISHED("已完成");
+
+		private String name;
+
+		TaskStatus(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return this.name;
+		}
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -24,15 +37,15 @@ public class RunLog implements Serializable {
 	@JoinColumn(name = "taskid")
 	@JsonBackReference
 	private Task task;
+	@ManyToOne
+	@JoinColumn(name = "explanid")
+	@JsonBackReference
 	private Explan explan;
-	private String url;
-	private String parentUrl;
-	private String contentCharset;
-	private String contentType;
-	private int stateCode;
-	@Column(columnDefinition = "MEDIUMBLOB")
-	private byte[] content;
+	private Date startTime;
+	private TaskStatus status = TaskStatus.NOTSTART;
+	private int processedPageCount;
 	private Date finishedTime;
+	private int cust;
 
 	public Long getId() {
 		return id;
@@ -58,36 +71,20 @@ public class RunLog implements Serializable {
 		this.explan = explan;
 	}
 
-	public String getUrl() {
-		return url;
+	public Date getStartTime() {
+		return startTime;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
 	}
 
-	public String getContentType() {
-		return contentType;
+	public TaskStatus getStatus() {
+		return status;
 	}
 
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
-
-	public int getStateCode() {
-		return stateCode;
-	}
-
-	public void setStateCode(int stateCode) {
-		this.stateCode = stateCode;
-	}
-
-	public byte[] getContent() {
-		return content;
-	}
-
-	public void setContent(byte[] content) {
-		this.content = content;
+	public void setStatus(TaskStatus status) {
+		this.status = status;
 	}
 
 	public Date getFinishedTime() {
@@ -98,20 +95,20 @@ public class RunLog implements Serializable {
 		this.finishedTime = finishedTime;
 	}
 
-	public String getContentCharset() {
-		return contentCharset;
+	public int getCust() {
+		return cust;
 	}
 
-	public void setContentCharset(String contentCharset) {
-		this.contentCharset = contentCharset;
+	public void setCust(int cust) {
+		this.cust = cust;
 	}
 
-	public String getParentUrl() {
-		return parentUrl;
+	public int getProcessedPageCount() {
+		return processedPageCount;
 	}
 
-	public void setParentUrl(String parentUrl) {
-		this.parentUrl = parentUrl;
+	public void setProcessedPageCount(int processedPageCount) {
+		this.processedPageCount = processedPageCount;
 	}
 
 }

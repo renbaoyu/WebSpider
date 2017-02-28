@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "spider_task")
 public class Task implements Serializable {
-	enum FinishedMode {
+	public enum FinishedMode {
 		ALL_FINISHED("全部URL完成"), ANY_FINISHED("第一次完成");
 
 		private String name;

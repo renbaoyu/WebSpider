@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>监测进度管理</title>
+</head>
+<body>
+	<a href="/spider/">返回</a>
+	<table>
+		<thead>
+			<tr>
+				<th>序号</th>
+				<th>监测任务</th>
+				<th>计划任务</th>
+				<th>开始时间</th>
+				<th>任务状态</th>
+				<th>已处理页面数</th>
+				<th>完成时间</th>
+				<th>消耗耗时(秒)</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="item:${taskprocessList}">
+				<td th:text="${itemStat.count}">1</td>
+				<td th:text="${item.task.name}"></td>
+				<td th:text="${item.explan ne null} ? ${item.explan.name}"></td>
+				<td th:text="${#calendars.format(item.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td th:text="${item.status.name}"></td>
+				<td th:text="${item.processedPageCount}"></td>
+				<td th:text="${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td th:text="${item.cust}"></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

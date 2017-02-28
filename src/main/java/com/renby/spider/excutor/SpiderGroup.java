@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import com.renby.spider.entity.Explan;
 import com.renby.spider.entity.RunResult;
 import com.renby.spider.entity.Task;
+import com.renby.spider.service.IRunTimeListenService;
 import com.renby.spider.service.impl.SpiderExcuteServiceImpl;
 
 import us.codecraft.webmagic.scheduler.MonitorableScheduler;
@@ -18,10 +19,10 @@ public class SpiderGroup {
 	private Explan explan;
 	private SuperSpider startSpider;
 	private final List<SuperSpider> spiders = new ArrayList<SuperSpider>();
-	private SpiderExcuteServiceImpl service;
+	private IRunTimeListenService service;
 	private RunResult result;
 
-	public SpiderGroup(Task task, SpiderExcuteServiceImpl service) {
+	public SpiderGroup(Task task, IRunTimeListenService service) {
 		this.task = task;
 		this.service = service;
 		this.result = new RunResult();
@@ -29,7 +30,7 @@ public class SpiderGroup {
 		this.result.setTask(task);
 	}
 
-	public SpiderGroup(Explan explan, SpiderExcuteServiceImpl service) {
+	public SpiderGroup(Explan explan, IRunTimeListenService service) {
 		this.explan = explan;
 		this.task = explan.getTask();
 		this.service = service;
@@ -59,7 +60,7 @@ public class SpiderGroup {
 		return spiders;
 	}
 
-	public SpiderExcuteServiceImpl getService() {
+	public IRunTimeListenService getService() {
 		return service;
 	}
 
@@ -72,6 +73,7 @@ public class SpiderGroup {
 		for (SuperSpider spider : spiders) {
 			spider.stop();
 		}
+		service.onSpiderGroupStop(this);
 	}
 
 	public void start() {
@@ -81,7 +83,7 @@ public class SpiderGroup {
 			spider.setExitWhenComplete(false);
 			spider.start();
 		}
-		service.getResultRepository().save(result);
+		service.onSpiderGroupStart(this);
 		new RunStatusListener(this).start();
 	}
 
@@ -113,6 +115,7 @@ public class SpiderGroup {
 					throw new RuntimeException("任务被中断", e);
 				}
 			}
+			group.getService().onTaskFinished(group);
 			group.stop();
 
 		}

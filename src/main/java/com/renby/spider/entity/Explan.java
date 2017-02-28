@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table(name = "spider_explan")
 public class Explan implements Serializable {
-	enum ExplanStatus {
+	public enum ExplanStatus {
 		NOT_START("未开始"), RUNNING("进行中"), INTERRUPTED("已中断"), SUSPEND("已暂停"), FINISHED("已完成");
 
 		private String name;
