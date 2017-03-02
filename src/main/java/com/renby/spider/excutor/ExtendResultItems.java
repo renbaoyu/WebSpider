@@ -3,7 +3,7 @@ package com.renby.spider.excutor;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.renby.spider.entity.TaskContentRule;
+import com.renby.spider.web.entity.TaskContentRule;
 
 import us.codecraft.webmagic.ResultItems;
 

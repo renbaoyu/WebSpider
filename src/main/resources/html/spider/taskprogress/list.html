@@ -10,6 +10,7 @@
 		<thead>
 			<tr>
 				<th>序号</th>
+				<th>操作</th>
 				<th>监测任务</th>
 				<th>计划任务</th>
 				<th>开始时间</th>
@@ -22,12 +23,13 @@
 		<tbody>
 			<tr th:each="item:${taskprocessList}">
 				<td th:text="${itemStat.count}">1</td>
+				<td><a th:href="@{'/spider/taskprogress/delete/' + ${item.id}}">删除</a></td>
 				<td th:text="${item.task.name}"></td>
 				<td th:text="${item.explan ne null} ? ${item.explan.name}"></td>
 				<td th:text="${#calendars.format(item.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
 				<td th:text="${item.status.name}"></td>
 				<td th:text="${item.processedPageCount}"></td>
-				<td th:text="${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td th:text="${item.finishedTime ne null} ? ${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
 				<td th:text="${item.cust}"></td>
 			</tr>
 		</tbody>

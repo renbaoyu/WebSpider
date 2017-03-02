@@ -1,11 +1,12 @@
 package com.renby.spider.runtime;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.renby.spider.entity.TaskProgress;
 import com.renby.spider.excutor.SpiderGroup;
+import com.renby.spider.web.entity.TaskProgress;
 
 public class ProgressManager {
 	private static ReentrantLock lock = new ReentrantLock();
@@ -24,6 +25,8 @@ public class ProgressManager {
 		try {
 			TaskProgress progress = progressMap.get(group);
 			progress.setProcessedPageCount(progress.getProcessedPageCount() + 1);
+			progress.setFinishedTime(new Date());
+			progress.setCust((int) ((progress.getFinishedTime().getTime() - progress.getStartTime().getTime())/1000));
 		} finally {
 			lock.unlock();
 		}

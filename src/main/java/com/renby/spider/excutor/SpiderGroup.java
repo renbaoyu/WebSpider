@@ -5,12 +5,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-import com.renby.spider.entity.Explan;
-import com.renby.spider.entity.RunResult;
-import com.renby.spider.entity.Task;
-import com.renby.spider.service.IRunTimeListenService;
-import com.renby.spider.service.impl.SpiderExcuteServiceImpl;
+import com.renby.spider.excutor.downloader.HttpClientFileDownloader;
+import com.renby.spider.excutor.downloader.SeleniumDownloader;
+import com.renby.spider.runtime.SystemConfig;
+import com.renby.spider.web.entity.Explan;
+import com.renby.spider.web.entity.RunResult;
+import com.renby.spider.web.entity.Task;
+import com.renby.spider.web.entity.Task.SiteType;
+import com.renby.spider.web.service.IRunTimeListenService;
 
+import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.scheduler.MonitorableScheduler;
 
 public class SpiderGroup {
@@ -42,6 +46,8 @@ public class SpiderGroup {
 	public void addSpider(SuperSpider spider) {
 		spiders.add(spider);
 		spider.setGroup(this);
+		setDownloader(spider);
+
 	}
 
 	public static Set<SpiderGroup> getGroups() {
@@ -60,7 +66,7 @@ public class SpiderGroup {
 		return spiders;
 	}
 
-	public IRunTimeListenService getService() {
+	public IRunTimeListenService getListener() {
 		return service;
 	}
 
@@ -94,8 +100,23 @@ public class SpiderGroup {
 	public void setStartSpider(SuperSpider startSpider) {
 		this.startSpider = startSpider;
 		this.startSpider.setGroup(this);
+		setDownloader(startSpider);
 	}
 
+	private void setDownloader(SuperSpider spider){
+		Downloader downloader = null;
+		if(task.getSiteType() == SiteType.STATIC_HTML){
+			downloader = new HttpClientFileDownloader();
+		}else{
+			downloader = new SeleniumDownloader();
+			boolean needScreenShot = SystemConfig.getBoolean("spider.screenshot");
+			((SeleniumDownloader)downloader).setScreenshot(needScreenShot);
+		}
+		int thread = SystemConfig.getIntValue("spider.download.thread");
+		downloader.setThread(thread);
+		spider.setDownloader(downloader);
+	}
+	
 	class RunStatusListener extends Thread {
 		SpiderGroup group;
 
@@ -115,7 +136,7 @@ public class SpiderGroup {
 					throw new RuntimeException("任务被中断", e);
 				}
 			}
-			group.getService().onTaskFinished(group);
+			group.getListener().onTaskFinished(group);
 			group.stop();
 
 		}

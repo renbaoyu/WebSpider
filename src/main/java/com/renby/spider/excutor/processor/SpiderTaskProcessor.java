@@ -3,11 +3,11 @@ package com.renby.spider.excutor.processor;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.renby.spider.entity.HtmlMatchRuleType;
-import com.renby.spider.entity.TaskContentRule;
 import com.renby.spider.excutor.ExtendPage;
 import com.renby.spider.excutor.SpiderGroup;
 import com.renby.spider.excutor.SuperSpider;
+import com.renby.spider.web.entity.HtmlMatchRuleType;
+import com.renby.spider.web.entity.TaskContentRule;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -39,7 +39,7 @@ public class SpiderTaskProcessor implements PageProcessor {
 				exPage.putNewURL(spider, values);
 			}
 		}
-		spiderGroup.getService().onPageProcessed(spiderGroup.getTask(), spiderGroup.getExplan(), exPage);
+		spiderGroup.getListener().onPageProcessed(spiderGroup.getTask(), spiderGroup.getExplan(), exPage);
 	}
 
 	@Override

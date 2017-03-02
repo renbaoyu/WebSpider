@@ -10,6 +10,8 @@
 		<li><label>页面名称:</label><label th:text="${page.name}"></label></li>
 		<li><label>完成时间:</label><label
 			th:text="${#calendars.format(page.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></label></li>
+		<li><label>网页截图:</label><a th:href="${page.screenshotUrl}"
+					th:text="${page.screenshotUrl}" target="_blank"></a></li>
 	</ul>
 	<a th:href="@{'/spider/runresult/view/' + ${page.result.id}}">返回</a>
 	<br />

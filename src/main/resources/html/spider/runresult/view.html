@@ -14,6 +14,7 @@
 				<th>序号</th>
 				<th>页面名称</th>
 				<th>完成时间</th>
+				<th>网页截图</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -22,6 +23,8 @@
 				<td><a th:href="@{'/spider/runresult_page/view/' + ${item.id}}"
 					th:text="${item.name}"></a></td>
 				<td th:text="${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td><a th:href="${item.screenshotUrl}"
+					th:text="${item.screenshotUrl}" target="_blank"></a></td>
 			</tr>
 		</tbody>
 	</table>

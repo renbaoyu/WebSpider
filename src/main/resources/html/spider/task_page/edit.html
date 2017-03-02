@@ -9,6 +9,7 @@
 	<form th:action="${action}" method="post" th:object="${page}">
 		<input name="task.id" th:value="${taskid}" type="hidden" /> <input
 			name="id" th:field="*{id}" type="hidden" />
+		<input name="startPage" th:value="*{startPage}" type="hidden" />
 		<ul>
 			<li><label>页面名称</label><input type="text" name="name"
 				th:field="*{name}" /></li>
@@ -22,8 +23,11 @@
 			</select></li>
 			<li><label>URL表达式</label><input type="text"
 				name="urlRuleExpression" th:field="*{urlRuleExpression}" /></li>
-			<li><label>是否目标页面</label><input type="text" name="target"
-				th:field="*{target}" /></li>
+			<li><label>是否目标页面</label><select name="target"
+				th:field="*{target}">
+					<option value="true">是</option>
+					<option value="false">否</option>
+			</select></li>
 		</ul>
 		<input type="submit" value="提交" /> <a
 			th:href="@{'/spider/task/view/' + ${taskid}}">返回</a>

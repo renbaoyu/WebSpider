@@ -19,13 +19,13 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.4.3.RELEASE</version>
 	</parent>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<!-- 使用JPA进行数据库操作，SpringBoot默认使用Hibernate进行数据库操作  -->
+		<!-- 使用JPA进行数据库操作，SpringBoot默认使用Hibernate进行数据库操作 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -50,6 +50,23 @@
 			<groupId>us.codecraft</groupId>
 			<artifactId>webmagic-core</artifactId>
 			<version>0.6.0</version>
+		</dependency>
+		<!-- 浏览器模拟工具selenium -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+		</dependency>
+		<!-- PhantomJSDriver -->
+		<dependency>
+			<groupId>com.codeborne</groupId>
+			<artifactId>phantomjsdriver</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+		<!-- 七牛云存储 -->
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>qiniu-java-sdk</artifactId>
+			<version>[7.2.0, 7.2.99]</version>
 		</dependency>
 	</dependencies>
 </project>

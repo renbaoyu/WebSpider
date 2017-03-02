@@ -18,6 +18,11 @@
 					<option value="ALL_FINISHED">全部URL完成</option>
 					<option value="ANY_FINISHED">第一次完成</option>
 			</select></li>
+			<li><label>网页类型</label><select name="siteType"
+				th:field="*{siteType}">
+					<option value="STATIC_HTML">静态网页</option>
+					<option value="DYNAMIC_HTML">动态网页</option>
+			</select></li>
 			<li><label>备注</label><input type="text" name="remarks"
 				th:field="*{remarks}" /></li>
 		</ul>

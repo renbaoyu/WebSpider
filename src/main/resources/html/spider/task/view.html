@@ -12,6 +12,8 @@
 		<li><label>起始URL：</label><label th:text="${task.startUrl}"></label></li>
 		<li><label>完成模式：</label><label
 			th:text="${task.finishedMode.name}"></label></li>
+		<li><label>网页类型：</label><label
+			th:text="${task.siteType.name}"></label></li>
 		<li><label>备注：</label><label th:text="${task.remarks}"></label></li>
 	</ul>
 	<a href="/spider/task/list">返回</a>
@@ -32,13 +34,13 @@
 		<tbody>
 			<tr th:each="item:${taskPagelist}">
 				<td th:text="${itemStat.count}">1</td>
-				<td><a th:if="!${item.startPage}" th:href="@{'/spider/task_page/edit/' + ${item.id}}">修改</a>
+				<td><a th:href="@{'/spider/task_page/edit/' + ${item.id}}">修改</a>
 					<a th:if="!${item.startPage}" th:href="@{'/spider/task_page/delete/' + ${item.id}}">删除</a></td>
 				<td><a th:href="@{'/spider/task_page/view/' + ${item.id}}"
 					th:text="${item.name}"></a></td>
 				<td th:text="${item.urlRuleType.name}"></td>
 				<td th:text="${item.urlRuleExpression}"></td>
-				<td th:text="${item.target}"></td>
+				<td th:text="${item.target} ? '是' : '否'"></td>
 			</tr>
 		</tbody>
 	</table>

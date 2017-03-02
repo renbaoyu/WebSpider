@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.renby.spider.entity.TaskContentRule;
+import com.renby.spider.web.entity.TaskContentRule;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;

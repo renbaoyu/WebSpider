@@ -5,13 +5,11 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.renby.spider.entity.Explan;
-import com.renby.spider.entity.RunResultPage;
-import com.renby.spider.entity.Task;
-import com.renby.spider.entity.TaskContentRule;
-import com.renby.spider.entity.TaskPageRule;
-import com.renby.spider.excutor.downloader.HttpClientFileDownloader;
 import com.renby.spider.excutor.processor.SpiderTaskProcessor;
+import com.renby.spider.web.entity.Explan;
+import com.renby.spider.web.entity.Task;
+import com.renby.spider.web.entity.TaskContentRule;
+import com.renby.spider.web.entity.TaskPageRule;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
@@ -26,8 +24,6 @@ public class SuperSpider extends Spider {
 	private Task task;
 	private Explan explan;
 	private TaskPageRule pageRule;
-	private RunResultPage pageResult;
-
 	public SuperSpider(PageProcessor pageProcessor) {
 		super(pageProcessor);
 	}
@@ -37,7 +33,6 @@ public class SuperSpider extends Spider {
 		this.task = task;
 		this.pageRule = pageRule;
 		super.exitWhenComplete = false;
-		this.downloader = new HttpClientFileDownloader();
 		this.setUUID(task.getName() + (pageRule == null ? "" : ":" + pageRule.getName()));
 		this.setEmptySleepTime(1000);
 	}
@@ -84,7 +79,7 @@ public class SuperSpider extends Spider {
         pageProcessor.process(page);
         extractAndAddRequests(page, spawnUrl);
         if (!page.getResultItems().isSkip()) {
-        	group.getService().onPipeLine(this, (ExtendResultItems) page.getResultItems());
+        	group.getListener().onPipeLine(this, (ExtendResultItems) page.getResultItems());
             for (Pipeline pipeline : pipelines) {
                 pipeline.process(page.getResultItems(), this);
             }
@@ -97,6 +92,7 @@ public class SuperSpider extends Spider {
 	@Override
 	protected void initComponent() {
 		super.initComponent();
+		group.getListener().onSpiderStart(this);
 	}
 
 	public TaskPageRule getPageRule() {
@@ -113,10 +109,6 @@ public class SuperSpider extends Spider {
 
 	public Task getTask() {
 		return task;
-	}
-
-	public RunResultPage getPageResult() {
-		return pageResult;
 	}
 
 	public SpiderGroup getGroup() {

@@ -15,6 +15,7 @@
 				<th>任务名称</th>
 				<th>开始URL</th>
 				<th>完成模式</th>
+				<th>网页类型</th>
 				<th>备注</th>
 			</tr>
 		</thead>
@@ -28,6 +29,7 @@
 					th:text="${item.name}"></a></td>
 				<td><a th:href="${item.startUrl}" th:text="${item.startUrl}" target="_blank"></a></td>
 				<td th:text="${item.finishedMode.name}"></td>
+				<td th:text="${item.siteType.name}"></td>
 				<td th:text="${item.remarks}"></td>
 			</tr>
 		</tbody>

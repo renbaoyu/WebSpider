@@ -10,6 +10,7 @@
 		<thead>
 			<tr>
 				<th>序号</th>
+				<th>操作</th>
 				<th>任务名称</th>
 				<th>完成时间</th>
 			</tr>
@@ -17,9 +18,11 @@
 		<tbody>
 			<tr th:each="item:${runresultlist}">
 				<td th:text="${itemStat.count}">1</td>
+				<td><a th:href="@{'/spider/runresult/delete/' + ${item.id}}">删除</a></td>
 				<td><a th:href="@{'/spider/runresult/view/' + ${item.id}}"
 					th:text="${item.name}"></a></td>
-				<td th:text="${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td
+					th:text="${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
 			</tr>
 		</tbody>
 	</table>
