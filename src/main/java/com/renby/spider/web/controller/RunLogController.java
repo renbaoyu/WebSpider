@@ -18,8 +18,6 @@ import com.renby.spider.web.repository.RunLogRepository;
 @RestController
 @RequestMapping(RunLogController.BASE_URL)
 public class RunLogController extends AbstractController{
-	public static final String DEFAULT_PAGE = "0";
-	public static final String DEFAULT_PAGE_SIZE = "20";
 	public static final String BASE_URL = "/spider/runlog";
 	@Autowired
 	private RunLogRepository runLogRepository;
@@ -34,8 +32,8 @@ public class RunLogController extends AbstractController{
 	 */
 	@RequestMapping({ "", "list" })
 	public ModelAndView list(@RequestParam(value = "s", required = false) String s,
-			@RequestParam(value = "page", required = false, defaultValue = DEFAULT_PAGE) int page,
-			@RequestParam(value = "pagesize", required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize) {
+			@RequestParam(value = "page", required = false, defaultValue = LIST_DEFAULT_PAGE) int page,
+			@RequestParam(value = "pagesize", required = false, defaultValue = LIST_DEFAULT_PAGE_SIZE) int pageSize) {
 		PageImpl<RunLog> logData = (PageImpl<RunLog>) runLogRepository.findAll(new PageRequest(page, pageSize));
 		List<RunLog> logs = logData.getContent();
 		ModelMap model = new ModelMap();

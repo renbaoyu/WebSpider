@@ -4,12 +4,12 @@ server:
     uri-encoding: utf-8
 spring:
     datasource:
-        url: jdbc:mysql://localhost:3306/springboottest
+        url: jdbc:mysql://localhost:3306/webspider
         username: admin
         password: admin
     jpa:
         database: MYSQL
-        show-sql: true
+        show-sql: false
         #Hibernate ddl auto (validate|create|create-drop|update)
         hibernate:
             ddl-auto: update

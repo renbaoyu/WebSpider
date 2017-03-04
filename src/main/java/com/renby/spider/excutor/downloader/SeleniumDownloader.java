@@ -22,6 +22,7 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.renby.spider.excutor.ExtendPage;
+import com.renby.spider.excutor.SuperSpider;
 import com.renby.spider.filemanager.QiniuFileManager;
 
 import us.codecraft.webmagic.Page;
@@ -32,7 +33,7 @@ import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.selector.PlainText;
 
 /**
- * 使用Selenium调用浏览器进行渲染。目前仅支持chrome。<br>
+ * 使用Selenium调用浏览器进行渲染。<br>
  * 需要下载Selenium driver支持。<br>
  *
  */
@@ -41,8 +42,6 @@ public class SeleniumDownloader implements Downloader, Closeable {
 	private Logger logger = Logger.getLogger(getClass());
 
 	private String PHANTOMJS = getClass().getClassLoader().getResource("phantomjs.exe").getPath();
-	private int sleepTime = 0;
-
 	private WebDriverManager manager = new WebDriverManager();
 	private boolean screenshot = true;
 
@@ -54,17 +53,24 @@ public class SeleniumDownloader implements Downloader, Closeable {
 	public Page download(Request request, Task task) {
 		logger.info("downloading page " + request.getUrl());
 		WebDriver webDriver = manager.getWebDriver();
-		webDriver.get(request.getUrl());
-		try {
-			Thread.sleep(sleepTime);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		WebDriver.Options manage = webDriver.manage();
 		Site site = task.getSite();
 		if (site.getCookies() != null) {
 			for (Map.Entry<String, String> cookieEntry : site.getCookies().entrySet()) {
 				Cookie cookie = new Cookie(cookieEntry.getKey(), cookieEntry.getValue());
+				manage.addCookie(cookie);
+			}
+		}
+		webDriver.get(request.getUrl());
+		try {
+			SuperSpider spider = (SuperSpider) task;
+			Thread.sleep(spider.getPageRule().getLoadedDelay() * 1000);
+		} catch (InterruptedException e) {
+			logger.error("下载延时时被中断", e);
+		}
+		if (site.getCookies() != null) {
+			for (Cookie cookie : manage.getCookies()) {
+				site.addCookie(cookie.getDomain(), cookie.getName(), cookie.getValue());
 				manage.addCookie(cookie);
 			}
 		}

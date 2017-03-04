@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "spider_task_rule")
+@Table(name = "spider_task_page")
 public class TaskPageRule implements Serializable {
 
 	@Id
@@ -23,8 +23,9 @@ public class TaskPageRule implements Serializable {
 	private String name;
 	private HtmlMatchRuleType urlRuleType = HtmlMatchRuleType.Normal;
 	private String urlRuleExpression;
-	private boolean startPage = true;
-	private boolean target;
+	private int loadedDelay = 0;
+	private boolean startPage = false;
+	private boolean target = true;
 
 	public Long getId() {
 		return id;
@@ -80,6 +81,14 @@ public class TaskPageRule implements Serializable {
 
 	public void setTask(Task task) {
 		this.task = task;
+	}
+
+	public int getLoadedDelay() {
+		return loadedDelay;
+	}
+
+	public void setLoadedDelay(int loadedDelay) {
+		this.loadedDelay = loadedDelay;
 	}
 
 }

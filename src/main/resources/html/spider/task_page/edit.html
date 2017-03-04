@@ -8,8 +8,8 @@
 	<label>监测页面设置</label>
 	<form th:action="${action}" method="post" th:object="${page}">
 		<input name="task.id" th:value="${taskid}" type="hidden" /> <input
-			name="id" th:field="*{id}" type="hidden" />
-		<input name="startPage" th:value="*{startPage}" type="hidden" />
+			name="id" th:field="*{id}" type="hidden" /> <input name="startPage"
+			th:value="*{startPage}" type="hidden" />
 		<ul>
 			<li><label>页面名称</label><input type="text" name="name"
 				th:field="*{name}" /></li>
@@ -28,6 +28,8 @@
 					<option value="true">是</option>
 					<option value="false">否</option>
 			</select></li>
+			<li><label>加载完成后延时(秒)</label><input type="text" name="loadedDelay"
+				th:field="*{loadedDelay}" /></li>
 		</ul>
 		<input type="submit" value="提交" /> <a
 			th:href="@{'/spider/task/view/' + ${taskid}}">返回</a>

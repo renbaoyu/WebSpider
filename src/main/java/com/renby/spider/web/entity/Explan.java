@@ -11,8 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 @Entity
 @Table(name = "spider_explan")
 public class Explan implements Serializable {
@@ -36,94 +34,67 @@ public class Explan implements Serializable {
 	private String name;
 	@ManyToOne
 	@JoinColumn(name = "taskid")
-	@JsonBackReference
 	private Task task;
 	private Date startTime;
-	private Date runTimeStart;
-	private Date runTimeEnd;
-	private Date cycleTime;
-	private int number;
-	private ExplanStatus explanStatus;
+	private int intervals;
+	private int repeatNumbers = 1;
+	private int finishedNumber;
+	private ExplanStatus explanStatus = ExplanStatus.NOT_START;
 	private String remarks;
-
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	public Task getTask() {
+		return task;
+	}
+	public void setTask(Task task) {
+		this.task = task;
+	}
 	public Date getStartTime() {
 		return startTime;
 	}
-
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
 
-	public Date getRunTimeStart() {
-		return runTimeStart;
+	public int getRepeatNumbers() {
+		return repeatNumbers;
 	}
-
-	public void setRunTimeStart(Date runTimeStart) {
-		this.runTimeStart = runTimeStart;
+	public void setRepeatNumbers(int repeatNumbers) {
+		this.repeatNumbers = repeatNumbers;
 	}
-
-	public Date getRunTimeEnd() {
-		return runTimeEnd;
+	public int getFinishedNumber() {
+		return finishedNumber;
 	}
-
-	public void setRunTimeEnd(Date runTimeEnd) {
-		this.runTimeEnd = runTimeEnd;
+	public void setFinishedNumber(int finishedNumber) {
+		this.finishedNumber = finishedNumber;
 	}
-
-	public Date getCycleTime() {
-		return cycleTime;
-	}
-
-	public void setCycleTime(Date cycleTime) {
-		this.cycleTime = cycleTime;
-	}
-
-	public int getNumber() {
-		return number;
-	}
-
-	public void setNumber(int number) {
-		this.number = number;
-	}
-
 	public ExplanStatus getExplanStatus() {
 		return explanStatus;
 	}
-
 	public void setExplanStatus(ExplanStatus explanStatus) {
 		this.explanStatus = explanStatus;
 	}
-
 	public String getRemarks() {
 		return remarks;
 	}
-
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-
-	public Task getTask() {
-		return task;
+	public int getIntervals() {
+		return intervals;
 	}
-
-	public void setTask(Task task) {
-		this.task = task;
+	public void setIntervals(int intervals) {
+		this.intervals = intervals;
 	}
 
 }

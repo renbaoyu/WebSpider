@@ -25,6 +25,7 @@ public class RunResultPage implements Serializable {
 	private RunResult result;
 	private String name;
 	private Date finishedDate = new Date();
+	private String url;
 	private String screenshotUrl;
 
 	public Long getId() {
@@ -65,6 +66,14 @@ public class RunResultPage implements Serializable {
 
 	public void setScreenshotUrl(String screenshotUrl) {
 		this.screenshotUrl = screenshotUrl;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 }

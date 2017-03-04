@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>监测任务管理</title>
+</head>
+<body>
+	<label>监测任务设置</label>
+	<form th:action="${action}" method="post" th:object="${explan}">
+		<input name="id" th:field="*{id}" type="hidden" />
+		<input name="task.id" th:field="*{task.id}" type="hidden" />
+		<ul>
+			<li><label>计划任务名称</label><input type="text" name="name"
+				th:field="*{name}" /></li>
+			<li><label>开始时间</label><input type="datetime" name="startTime"
+				th:field="*{startTime}" /></li>
+			<li><label>任务周期</label><input type="number" name="intervals"
+				th:field="*{intervals}" /></li>
+			<li><label>重复次数</label><input type="number" name="repeatNumbers"
+				th:field="*{repeatNumbers}" /></li>
+			<li><label>已完成次数</label><input type="number" name="finishedNumber"
+				th:field="*{finishedNumber}" /></li>
+			<li><label>备注</label><input type="text" name="remarks"
+				th:field="*{remarks}" /></li>
+		</ul>
+		<input type="submit" value="提交" /> <a href="/spider/explan/list">返回</a>
+	</form>
+</body>
+</html>

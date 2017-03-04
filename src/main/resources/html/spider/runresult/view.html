@@ -6,7 +6,7 @@
 </head>
 <body>
 	<a href="/spider/runresult/list">返回</a>
-	<br/>
+	<br />
 	<label>页面抽取内容</label>
 	<table>
 		<thead>
@@ -14,6 +14,7 @@
 				<th>序号</th>
 				<th>页面名称</th>
 				<th>完成时间</th>
+				<th>网页URL</th>
 				<th>网页截图</th>
 			</tr>
 		</thead>
@@ -22,7 +23,10 @@
 				<td th:text="${itemStat.count}">1</td>
 				<td><a th:href="@{'/spider/runresult_page/view/' + ${item.id}}"
 					th:text="${item.name}"></a></td>
-				<td th:text="${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td
+					th:text="${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td><a th:href="${item.url}" th:text="${item.url}"
+					target="_blank"></a></td>
 				<td><a th:href="${item.screenshotUrl}"
 					th:text="${item.screenshotUrl}" target="_blank"></a></td>
 			</tr>

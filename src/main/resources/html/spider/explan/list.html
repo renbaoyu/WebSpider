@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>计划任务管理</title>
+</head>
+<body>
+	<a href="/spider/">返回</a>
+	<a href="/spider/explan/new">新增</a>
+	<table>
+		<thead>
+			<tr>
+				<th>序号</th>
+				<th>操作</th>
+				<th>计划任务名称</th>
+				<th>监测任务</th>
+				<th>开始时间</th>
+				<th>任务周期</th>
+				<th>执行次数</th>
+				<th>已执行次数</th>
+				<th>任务状态</th>
+				<th>备注</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="item:${explanlist}">
+				<td th:text="${itemStat.count}">1</td>
+				<td><a th:href="@{'/spider/explan/edit/' + ${item.id}}">修改</a>
+					<a th:href="@{'/spider/explan/delete/' + ${item.id}}">删除</a></td>
+				<td th:text="${item.name}"></td>
+				<td><a th:href="@{'/spider/task/view/' + ${item.task.id}}"
+					th:text="${item.task.name}"></a></td>
+				<td th:text="${item.startTime}"></td>
+				<td th:text="${item.intervals}"></td>
+				<td th:text="${item.repeatNumbers}"></td>
+				<td th:text="${item.finishedNumber}"></td>
+				<td th:text="${item.explanStatus.name}"></td>
+				<td th:text="${item.remarks}"></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

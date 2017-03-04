@@ -12,6 +12,7 @@
 		<li><label>URL表达式</label><label
 			th:text="${page.urlRuleExpression}"></label></li>
 		<li><label>是否目标页面</label><label th:text="${page.target}"></label></li>
+		<li><label>加载完成后延时(秒)</label><label th:text="${page.loadedDelay}"></label></li>
 	</ul>
 	<a th:href="@{'/spider/task/view/' + ${page.task.id}}">返回</a>
 	<br/>

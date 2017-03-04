@@ -29,6 +29,7 @@
 				<th>页面URL表达式类型</th>
 				<th>页面URL表达式</th>
 				<th>是否目标页面</th>
+				<th>加载完成后延时(秒)</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -41,6 +42,7 @@
 				<td th:text="${item.urlRuleType.name}"></td>
 				<td th:text="${item.urlRuleExpression}"></td>
 				<td th:text="${item.target} ? '是' : '否'"></td>
+				<td th:text="${item.loadedDelay}"></td>
 			</tr>
 		</tbody>
 	</table>

@@ -1,4 +1,4 @@
-package com.renby.spider.web.configuration;
+package com.renby.spider.init.config;
 
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
