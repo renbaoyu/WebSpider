@@ -2,31 +2,71 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
+<link href="/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet"></link>
 <title>监测任务管理</title>
 </head>
-<body>
-	<label>监测任务设置</label>
-	<form th:action="${action}" method="post" th:object="${task}">
+<body style="padding: 20px;">
+	<form th:action="${action}" method="post" th:object="${task}"
+		role="form" class="form-horizontal">
 		<input name="id" th:field="*{id}" type="hidden" />
-		<ul>
-			<li><label>任务名称</label><input type="text" name="name"
-				th:field="*{name}" /></li>
-			<li><label>起始URL</label><input type="text" name="startUrl"
-				th:field="*{startUrl}" /></li>
-			<li><label>完成模式</label><select name="finishedMode"
-				th:field="*{finishedMode}">
-					<option value="ALL_FINISHED">全部URL完成</option>
-					<option value="ANY_FINISHED">第一次完成</option>
-			</select></li>
-			<li><label>网页类型</label><select name="siteType"
-				th:field="*{siteType}">
-					<option value="STATIC_HTML">静态网页</option>
-					<option value="DYNAMIC_HTML">动态网页</option>
-			</select></li>
-			<li><label>备注</label><input type="text" name="remarks"
-				th:field="*{remarks}" /></li>
-		</ul>
-		<input type="submit" value="提交" /> <a href="/spider/task/list">返回</a>
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<a href="/spider/task/list" class="btn btn-default"><span
+					class="glyphicon glyphicon-log-in"></span> 返回</a> <a id="submit"
+					class="btn btn-success" href="javascript:void(0)"><span
+					class="glyphicon glyphicon-ok"></span>提交</a>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">编辑监测任务</h3>
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label for="name" class="col-sm-1 control-label">任务名称</label>
+					<div class="col-sm-11">
+						<input type="text" class="form-control" id="name"
+							th:field="*{name}" placeholder="请输入任务名称" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="startUrl" class="col-sm-1 control-label">起始URL</label>
+					<div class="col-sm-11">
+						<input type="text" class="form-control" id="startUrl"
+							th:field="*{startUrl}" placeholder="请输入起始URL" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="finishedMode" class="col-sm-1 control-label">完成模式</label>
+					<div class="col-sm-11">
+						<select name="finishedMode" id="finishedMode"
+							th:field="*{finishedMode}" class="form-control">
+							<option value="ALL_FINISHED">全部URL完成</option>
+							<option value="ANY_FINISHED">第一次完成</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="siteType" class="col-sm-1 control-label">网页类型</label>
+					<div class="col-sm-11">
+						<select name="siteType" id="siteType" th:field="*{siteType}"
+							class="form-control">
+							<option value="STATIC_HTML">静态网页</option>
+							<option value="DYNAMIC_HTML">动态网页</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="remarks" class="col-sm-1 control-label">备注</label>
+					<div class="col-sm-11">
+						<textarea class="form-control" id="remarks" th:field="*{remarks}"
+							placeholder="请输入备注" rows="3"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
 	</form>
+
+	<div th:include="/common/footer::foot"></div>
 </body>
 </html>

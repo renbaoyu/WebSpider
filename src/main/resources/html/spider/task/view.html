@@ -3,21 +3,59 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>监测任务管理</title>
+<link href="/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet"></link>
 </head>
-<body>
-	<label>监测任务设置</label>
+<body style="padding: 20px;">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<a href="/spider/task/list" class="btn btn-default"><span
+				class="glyphicon glyphicon-log-in"></span> 返回</a>
+		</div>
+	</div>
 	<input name="id" th:field="*{id}" type="hidden" />
-	<ul>
-		<li><label>任务名称：</label><label th:text="${task.name}"></label></li>
-		<li><label>起始URL：</label><label th:text="${task.startUrl}"></label></li>
-		<li><label>完成模式：</label><label
-			th:text="${task.finishedMode.name}"></label></li>
-		<li><label>网页类型：</label><label
-			th:text="${task.siteType.name}"></label></li>
-		<li><label>备注：</label><label th:text="${task.remarks}"></label></li>
-	</ul>
-	<a href="/spider/task/list">返回</a>
-	<br/>
+	<div class="panel panel-default" th:object="${task}">
+		<div class="panel-heading">
+			<h3 class="panel-title">监测任务详情</h3>
+		</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<label for="name" class="col-sm-1 control-label">任务名称</label>
+				<div class="col-sm-11">
+					<input type="text" class="form-control" id="name"
+						th:field="*{name}" readonly="readonly" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="startUrl" class="col-sm-1 control-label">起始URL</label>
+				<div class="col-sm-11">
+					<input type="text" class="form-control" id="startUrl"
+						th:field="*{startUrl}" readonly="readonly" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="finishedMode" class="col-sm-1 control-label">完成模式</label>
+				<div class="col-sm-11">
+					<input type="text" class="form-control" id="startUrl"
+						th:field="*{finishedMode.name}" readonly="readonly" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="siteType" class="col-sm-1 control-label">网页类型</label>
+				<div class="col-sm-11">
+					<input type="text" class="form-control" id="siteType"
+						th:field="*{siteType.name}" readonly="readonly" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="remarks" class="col-sm-1 control-label">备注</label>
+				<div class="col-sm-11">
+					<textarea class="form-control" id="remarks" th:field="*{remarks}"
+						rows="3" readonly="readonly"></textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br />
 	<label>页面信息设置</label>
 	<a th:href="@{'/spider/task_page/new?task=' + ${task.id}}">新增</a>
 	<table>
@@ -36,7 +74,8 @@
 			<tr th:each="item:${taskPagelist}">
 				<td th:text="${itemStat.count}">1</td>
 				<td><a th:href="@{'/spider/task_page/edit/' + ${item.id}}">修改</a>
-					<a th:if="!${item.startPage}" th:href="@{'/spider/task_page/delete/' + ${item.id}}">删除</a></td>
+					<a th:if="!${item.startPage}"
+					th:href="@{'/spider/task_page/delete/' + ${item.id}}">删除</a></td>
 				<td><a th:href="@{'/spider/task_page/view/' + ${item.id}}"
 					th:text="${item.name}"></a></td>
 				<td th:text="${item.urlRuleType.name}"></td>
@@ -46,5 +85,6 @@
 			</tr>
 		</tbody>
 	</table>
+	<div th:include="/common/footer::foot"></div>
 </body>
 </html>

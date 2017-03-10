@@ -1,15 +1,56 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>网络信息监测系统</title></head>
+<title>网络信息监测系统</title>
+<link href="/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet"></link>
+</head>
 <body>
-欢迎使用网络信息监测系统
-<ul>
-	<li><a href="/spider/task/list">监测任务管理</a></li>
-	<li><a href="/spider/explan/list">计划任务管理</a></li>
-	<li><a href="/spider/taskprogress/list">监测进度管理</a></li>
-	<li><a href="/spider/runresult/list">查看监测结果</a></li>
-	<li><a href="/spider/runlog/list">查看监测日志</a></li>
-</ul>
+	<header style="text-align: center;">
+		<h1>欢迎使用网络信息监测系统</h1>
+	</header>
+	<nav>
+		<ul class="nav nav-tabs">
+			<li id="task"><a href="javascript:void(0)">监测任务管理</a></li>
+			<li id="explan"><a href="javascript:void(0)">计划任务管理</a></li>
+			<li id="progress"><a href="javascript:void(0)">监测进度管理</a></li>
+			<li id="result"><a href="javascript:void(0)">查看监测结果</a></li>
+			<li id="log"><a href="javascript:void(0)">查看监测日志</a></li>
+		</ul>
+	</nav>
+	<article>
+		<iframe id="content" height="700px" width="100%" style="border: none;"></iframe>
+	</article>
+	<aside></aside>
+	<footer style="text-align: center;">
+		<h5>版权所有@似水无痕</h5>
+	</footer>
+	<script src="/script/jquery-3.1.1.min.js"></script>
+	<script src="/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
 </body>
+<script type="text/javascript">
+	$("#task").click(function(e) {
+		reload(e, "/spider/task/list");
+	})
+	$("#explan").click(function(e) {
+		reload(e, "/spider/explan/list");
+	})
+	$("#progress").click(function(e) {
+		reload(e, "/spider/taskprogress/list");
+	})
+	$("#result").click(function(e) {
+		reload(e, "/spider/runresult/list");
+	})
+	$("#log").click(function(e) {
+		reload(e, "/spider/runlog/list");
+	})
+	function reload(e, url) {
+		$("nav ul li").removeClass("active");
+		$(e.currentTarget).addClass("active");
+		$("#content").attr("src", url);
+	}
+	$(function() {
+		$("#task").click()
+	});
+</script>
 </html>
