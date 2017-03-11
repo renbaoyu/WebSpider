@@ -9,4 +9,16 @@ $(function(){
 	$("input:checkbox[readonly]").click(function(){
 		return false;
 	});
+
+	// 绑定时间选择控件
+	$("input[type=datetime]").click(function(){
+		if(laydate){
+			laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})
+		}else{
+			alert("使用datetime类型的数据时，需要引入laydate插件");
+		}
+	});
+
+	// 设置表格的皮肤
+	$("table").addClass("table table-striped");
 })

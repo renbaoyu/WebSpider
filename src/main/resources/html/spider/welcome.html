@@ -3,7 +3,10 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>网络信息监测系统</title>
-<link href="/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet"></link>
+<link href="/bootstrap/css/bootstrap.css" rel="stylesheet"></link>
+<link href="/style/common.css" rel="stylesheet"></link>
+<style type="text/css">
+</style>
 </head>
 <body>
 	<header style="text-align: center;">
@@ -11,39 +14,39 @@
 	</header>
 	<nav>
 		<ul class="nav nav-tabs">
-			<li id="task"><a href="javascript:void(0)">监测任务管理</a></li>
-			<li id="explan"><a href="javascript:void(0)">计划任务管理</a></li>
-			<li id="progress"><a href="javascript:void(0)">监测进度管理</a></li>
-			<li id="result"><a href="javascript:void(0)">查看监测结果</a></li>
-			<li id="log"><a href="javascript:void(0)">查看监测日志</a></li>
+			<li class="active"><a href="#task" data-toggle="tab">监测任务管理</a></li>
+			<li><a href="#explan" data-toggle="tab">计划任务管理</a></li>
+			<li><a href="#progress" data-toggle="tab">监测进度管理</a></li>
+			<li><a href="#result" data-toggle="tab">监测结果管理</a></li>
+			<li><a href="#log" data-toggle="tab">监测日志管理</a></li>
 		</ul>
 	</nav>
 	<article>
-		<iframe id="content" height="700px" width="100%" style="border: none;"></iframe>
+		<div class="tab-content">
+			<div id="task" class="tab-pane fade in active">
+				<iframe height="700px" width="100%" src="/spider/task/list"></iframe>
+			</div>
+			<div id="explan" class="tab-pane fade">
+				<iframe height="700px" width="100%" src="/spider/explan/list"></iframe>
+			</div>
+			<div id="progress" class="tab-pane fade">
+				<iframe height="700px" width="100%" src="/spider/taskprogress/list"></iframe>
+			</div>
+			<div id="result" class="tab-pane fade">
+				<iframe height="700px" width="100%" src="/spider/runresult/list"></iframe>
+			</div>
+			<div id="log" class="tab-pane fade">
+				<iframe height="700px" width="100%" src="/spider/runlog/list"></iframe>
+			</div>
+		</div>
 	</article>
 	<aside></aside>
 	<footer style="text-align: center;">
 		<h5>版权所有@似水无痕</h5>
 	</footer>
-	<script src="/script/jquery-3.1.1.min.js"></script>
-	<script src="/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
+	<div th:include="/common/footer::foot"></div>
 </body>
 <script type="text/javascript">
-	$("#task").click(function(e) {
-		reload(e, "/spider/task/list");
-	})
-	$("#explan").click(function(e) {
-		reload(e, "/spider/explan/list");
-	})
-	$("#progress").click(function(e) {
-		reload(e, "/spider/taskprogress/list");
-	})
-	$("#result").click(function(e) {
-		reload(e, "/spider/runresult/list");
-	})
-	$("#log").click(function(e) {
-		reload(e, "/spider/runlog/list");
-	})
 	function reload(e, url) {
 		$("nav ul li").removeClass("active");
 		$(e.currentTarget).addClass("active");

@@ -3,34 +3,50 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>监测结果查看</title>
+<link href="/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet"></link>
+<link href="/style/common.css" rel="stylesheet"></link>
 </head>
 <body>
-	<a href="/spider/runresult/list">返回</a>
-	<br />
-	<label>页面抽取内容</label>
-	<table>
-		<thead>
-			<tr>
-				<th>序号</th>
-				<th>页面名称</th>
-				<th>完成时间</th>
-				<th>网页URL</th>
-				<th>网页截图</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="item:${resultPagelist}">
-				<td th:text="${itemStat.count}">1</td>
-				<td><a th:href="@{'/spider/runresult_page/view/' + ${item.id}}"
-					th:text="${item.name}"></a></td>
-				<td
-					th:text="${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-				<td><a th:href="${item.url}" th:text="${item.url}"
-					target="_blank"></a></td>
-				<td><a th:href="${item.screenshotUrl}"
-					th:text="${item.screenshotUrl}" target="_blank"></a></td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<a href="/spider/runresult/list" class="btn btn-default"><span
+				class="glyphicon glyphicon-log-in"></span> 返回</a> <a href=""
+				class="btn btn-default"><span
+				class="glyphicon glyphicon-refresh"></span> 刷新</a>
+		</div>
+	</div>
+	<div class="panel panel-default" th:object="${task}">
+		<div class="panel-heading">
+			<h3 class="panel-title">页面抽取内容列表</h3>
+		</div>
+		<div class="panel-body">
+			<table>
+				<thead>
+					<tr>
+						<th>序号</th>
+						<th>页面名称</th>
+						<th>完成时间</th>
+						<th>网页URL</th>
+						<th>网页截图</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item:${resultPagelist}">
+						<td th:text="${itemStat.count}">1</td>
+						<td><a
+							th:href="@{'/spider/runresult_page/view/' + ${item.id}}"
+							th:text="${item.name}"></a></td>
+						<td
+							th:text="${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+						<td><a th:href="${item.url}" th:text="${item.url}"
+							target="_blank"></a></td>
+						<td><a th:href="${item.screenshotUrl}"
+							th:text="${item.screenshotUrl}" target="_blank"></a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
 </body>
 </html>

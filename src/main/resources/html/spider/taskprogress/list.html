@@ -3,9 +3,16 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>监测进度管理</title>
+<link href="/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet"></link>
+<link href="/style/common.css" rel="stylesheet"></link>
 </head>
 <body>
-	<a href="/spider/">返回</a>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<a href="" class="btn btn-default"><span
+				class="glyphicon glyphicon-refresh"></span> 刷新</a>
+		</div>
+	</div>
 	<table>
 		<thead>
 			<tr>
@@ -23,16 +30,20 @@
 		<tbody>
 			<tr th:each="item:${taskprocessList}">
 				<td th:text="${itemStat.count}">1</td>
-				<td><a th:href="@{'/spider/taskprogress/delete/' + ${item.id}}">删除</a></td>
+				<td><a th:href="@{'/spider/taskprogress/delete/' + ${item.id}}"
+					class="glyphicon glyphicon-remove" title="删除"></a></td>
 				<td th:text="${item.task.name}"></td>
 				<td th:text="${item.explan ne null} ? ${item.explan.name}"></td>
-				<td th:text="${#calendars.format(item.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td
+					th:text="${#calendars.format(item.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
 				<td th:text="${item.status.name}"></td>
 				<td th:text="${item.processedPageCount}"></td>
-				<td th:text="${item.finishedTime ne null} ? ${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td
+					th:text="${item.finishedTime ne null} ? ${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
 				<td th:text="${item.cust}"></td>
 			</tr>
 		</tbody>
 	</table>
+	<div th:include="/common/footer::foot"></div>
 </body>
 </html>

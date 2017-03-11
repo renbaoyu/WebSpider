@@ -3,10 +3,18 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>计划任务管理</title>
+<link href="/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet"></link>
+<link href="/style/common.css" rel="stylesheet"></link>
 </head>
 <body>
-	<a href="/spider/">返回</a>
-	<a href="/spider/explan/new">新增</a>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<a href="" class="btn btn-default"><span
+				class="glyphicon glyphicon-refresh"></span> 刷新</a> <a
+				href="/spider/explan/new" class="btn btn-success"><span
+				class="glyphicon glyphicon-plus"></span> 新增</a>
+		</div>
+	</div>
 	<table>
 		<thead>
 			<tr>
@@ -25,8 +33,10 @@
 		<tbody>
 			<tr th:each="item:${explanlist}">
 				<td th:text="${itemStat.count}">1</td>
-				<td><a th:href="@{'/spider/explan/edit/' + ${item.id}}">修改</a>
-					<a th:href="@{'/spider/explan/delete/' + ${item.id}}">删除</a></td>
+				<td><a th:href="@{'/spider/explan/edit/' + ${item.id}}"
+					class="glyphicon glyphicon-edit" title="修改"></a> <a
+					th:href="@{'/spider/explan/delete/' + ${item.id}}"
+					class="glyphicon glyphicon-remove" title="删除"></a></td>
 				<td th:text="${item.name}"></td>
 				<td><a th:href="@{'/spider/task/view/' + ${item.task.id}}"
 					th:text="${item.task.name}"></a></td>
@@ -39,5 +49,6 @@
 			</tr>
 		</tbody>
 	</table>
+	<div th:include="/common/footer::foot"></div>
 </body>
 </html>
