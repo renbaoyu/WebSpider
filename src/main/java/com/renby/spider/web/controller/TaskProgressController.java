@@ -34,10 +34,11 @@ public class TaskProgressController extends AbstractController {
 	public ModelAndView list(@RequestParam(value = "s", required = false) String s,
 			@RequestParam(value = "page", required = false, defaultValue = LIST_DEFAULT_PAGE) int page,
 			@RequestParam(value = "pagesize", required = false, defaultValue = LIST_DEFAULT_PAGE_SIZE) int pageSize) {
-		PageImpl<TaskProgress> logData = (PageImpl<TaskProgress>) progressRepository
+		PageImpl<TaskProgress> processData = (PageImpl<TaskProgress>) progressRepository
 				.findAll(new PageRequest(page, pageSize));
-		List<TaskProgress> tasks = logData.getContent();
+		List<TaskProgress> tasks = processData.getContent();
 		ModelMap model = new ModelMap();
+		setPagination(model, processData, getListPage(), s, pageSize, page);
 		model.addAttribute("taskprocessList", tasks);
 		return new ModelAndView(getListPage(), model);
 	}

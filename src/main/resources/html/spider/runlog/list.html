@@ -33,7 +33,8 @@
 		<tbody>
 			<tr th:each="item:${runloglist}">
 				<td th:text="${itemStat.count}">1</td>
-				<td><a th:href="@{'/spider/runlog/delete/' + ${item.id}}">删除</a></td>
+				<td><a th:href="@{'/spider/runlog/delete/' + ${item.id}}"
+					class="glyphicon glyphicon-remove" title="删除"></a></td>
 				<td th:text="${item.task.name}"></td>
 				<td th:text="${item.explan ne null} ? ${item.explan.name} : ''"></td>
 				<td
@@ -48,5 +49,7 @@
 			</tr>
 		</tbody>
 	</table>
+	<div class="text-center" th:include="/common/control::pagination"></div>
+	<div th:include="/common/footer::foot"></div>
 </body>
 </html>

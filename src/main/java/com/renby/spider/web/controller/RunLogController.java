@@ -37,6 +37,7 @@ public class RunLogController extends AbstractController{
 		PageImpl<RunLog> logData = (PageImpl<RunLog>) runLogRepository.findAll(new PageRequest(page, pageSize));
 		List<RunLog> logs = logData.getContent();
 		ModelMap model = new ModelMap();
+		setPagination(model, logData, getListPage(), s, pageSize, page);
 		model.addAttribute("runloglist", logs);
 		return new ModelAndView(getListPage(), model);
 	}

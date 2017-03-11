@@ -43,14 +43,15 @@ public class RunResultController extends AbstractController {
 			@RequestParam(value = "page", required = false, defaultValue = LIST_DEFAULT_PAGE) int page,
 			@RequestParam(value = "pagesize", required = false, defaultValue = LIST_DEFAULT_PAGE_SIZE) int pageSize) {
 		List<RunResult> results = null;
+		ModelMap model = new ModelMap();
 		if (StringUtils.isEmpty(s)) {
 			PageImpl<RunResult> resultData = (PageImpl<RunResult>) resultRepository
 					.findAll(new PageRequest(page, pageSize));
+			setPagination(model, resultData, getListPage(), s, pageSize, page);
 			results = resultData.getContent();
 		} else {
 			results = resultRepository.findByNameLike(s, new PageRequest(page, pageSize));
 		}
-		ModelMap model = new ModelMap();
 		model.addAttribute("runresultlist", results);
 		return new ModelAndView(getListPage(), model);
 	}
@@ -62,13 +63,16 @@ public class RunResultController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("view/{id}")
-	public ModelAndView viewPage(@PathVariable("id") long id) {
+	public ModelAndView viewPage(@PathVariable("id") long id, @RequestParam(value = "s", required = false) String s,
+			@RequestParam(value = "page", required = false, defaultValue = LIST_DEFAULT_PAGE) int page,
+			@RequestParam(value = "pagesize", required = false, defaultValue = LIST_DEFAULT_PAGE_SIZE) int pageSize) {
 		RunResult result = resultRepository.findOne(id);
-		List<RunResultPage> resultPage = resultPageRepository.findByResult(result);
-		
+		PageImpl<RunResultPage> resultPage = resultPageRepository.findByResult(result, new PageRequest(page, pageSize));
+
 		ModelMap model = new ModelMap();
+		setPagination(model, resultPage, getViewPageUrl(id), s, pageSize, page);
 		model.addAttribute("result", result);
-		model.addAttribute("resultPagelist", resultPage);
+		model.addAttribute("resultPagelist", resultPage.getContent());
 		return new ModelAndView(getViewPage(), model);
 	}
 
@@ -87,6 +91,7 @@ public class RunResultController extends AbstractController {
 		resultRepository.delete(result);
 		return list(null, Integer.valueOf(LIST_DEFAULT_PAGE), Integer.valueOf(LIST_DEFAULT_PAGE_SIZE));
 	}
+
 	@Override
 	public String getBasePage() {
 		return BASE_URL;

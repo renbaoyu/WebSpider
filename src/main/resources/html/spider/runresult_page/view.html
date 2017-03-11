@@ -3,36 +3,86 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>监测结果查看</title>
+<link href="/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet"></link>
+<link href="/style/common.css" rel="stylesheet"></link>
 </head>
 <body>
-	<ul>
-		<li><label>任务名称:</label><label th:text="${page.result.name}"></label></li>
-		<li><label>页面名称:</label><label th:text="${page.name}"></label></li>
-		<li><label>完成时间:</label><label
-			th:text="${#calendars.format(page.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></label></li>
-		<li><label>网页URL:</label><a th:href="${page.url}"
-			th:text="${page.url}" target="_blank"></a></li>
-		<li><label>网页截图:</label><a th:href="${page.screenshotUrl}"
-			th:text="${page.screenshotUrl}" target="_blank"></a></li>
-	</ul>
-	<a th:href="@{'/spider/runresult/view/' + ${page.result.id}}">返回</a>
-	<br />
-	<label>页面抽取内容</label>
-	<table>
-		<thead>
-			<tr>
-				<th>序号</th>
-				<th>内容名称</th>
-				<th>内容详情</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="item:${pageDatalist}">
-				<td th:text="${itemStat.count}">1</td>
-				<td th:text="${item.name}"></td>
-				<td th:text="${item.content}"></td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<a th:href="@{'/spider/runresult/view/' + ${page.result.id}}"
+				class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span>
+				返回</a> <a href="" class="btn btn-default"><span
+				class="glyphicon glyphicon-refresh"></span> 刷新</a>
+		</div>
+	</div>
+	<div class="panel panel-default" th:object="${page}">
+		<div class="panel-heading">
+			<h3 class="panel-title">监测任务详情</h3>
+		</div>
+		<div class="panel-body">
+
+			<div class="form-group">
+				<label for="result.name" class="col-sm-1 control-label">任务名称</label>
+				<div class="col-sm-11">
+					<input type="text" class="form-control" id="result.name"
+						th:field="*{result.name}" readonly="readonly" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="name" class="col-sm-1 control-label">页面名称</label>
+				<div class="col-sm-11">
+					<input type="text" class="form-control" id="name"
+						th:field="*{name}" readonly="readonly" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="finishedTime" class="col-sm-1 control-label">完成时间</label>
+				<div class="col-sm-11">
+					<input type="text" class="form-control" id="finishedTime"
+						th:value="*{#calendars.format(finishedTime,'yyyy-MM-dd HH:mm:ss')}"
+						readonly="readonly" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="url" class="col-sm-1 control-label">网页URL</label>
+				<div class="col-sm-11">
+					<a class="form-control" th:href="!*{url} ? 'javascript:void(0)'"
+						th:text="*{url}" target="_blank"></a>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="url" class="col-sm-1 control-label">网页截图</label>
+				<div class="col-sm-11">
+					<a class="form-control" th:href="*{screenshotUrl}"
+						th:text="*{screenshotUrl}" target="_blank"></a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default" th:object="${task}">
+		<div class="panel-heading">
+			<h3 class="panel-title">页面抽取内容</h3>
+		</div>
+		<div class="panel-body">
+			<table>
+				<thead>
+					<tr>
+						<th>序号</th>
+						<th>内容名称</th>
+						<th>内容详情</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item:${pageDatalist}">
+						<td th:text="${itemStat.count}">1</td>
+						<td th:text="${item.name}"></td>
+						<td th:text="${item.content}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div th:include="/common/footer::foot"></div>
 </body>
 </html>

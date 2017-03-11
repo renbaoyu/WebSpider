@@ -38,14 +38,15 @@ public class ExplanController extends AbstractController {
 			@RequestParam(value = "page", required = false, defaultValue = LIST_DEFAULT_PAGE) int page,
 			@RequestParam(value = "pagesize", required = false, defaultValue = LIST_DEFAULT_PAGE_SIZE) int pageSize) {
 		List<Explan> explans = null;
+		ModelMap model = new ModelMap();
 		if (StringUtils.isEmpty(s)) {
-			PageImpl<Explan> pageData = (PageImpl<Explan>) explanRepository
+			PageImpl<Explan> explanData = (PageImpl<Explan>) explanRepository
 					.findAll(new PageRequest(page, pageSize));
-			explans = pageData.getContent();
+			setPagination(model, explanData, getListPage(), s, pageSize, page);
+			explans = explanData.getContent();
 		} else {
 			explans = explanRepository.findByNameLike(s, new PageRequest(page, pageSize));
 		}
-		ModelMap model = new ModelMap();
 		model.addAttribute("explanlist", explans);
 		return new ModelAndView(getListPage(), model);
 	}

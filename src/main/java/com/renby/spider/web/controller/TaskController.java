@@ -50,14 +50,15 @@ public class TaskController extends AbstractController {
 			@RequestParam(value = "page", required = false, defaultValue = LIST_DEFAULT_PAGE) int page,
 			@RequestParam(value = "pagesize", required = false, defaultValue = LIST_DEFAULT_PAGE_SIZE) int pageSize) {
 		List<Task> tasks = null;
+		ModelMap model = new ModelMap();
 		if (StringUtils.isEmpty(s)) {
 			PageImpl<Task> pageData = (PageImpl<Task>) taskRepository
 					.findAll(new PageRequest(page, pageSize));
 			tasks = pageData.getContent();
+			setPagination(model, pageData, getListPage(), s, pageSize, page);
 		} else {
 			tasks = taskRepository.findByNameLike(s, new PageRequest(page, pageSize));
 		}
-		ModelMap model = new ModelMap();
 		model.addAttribute("tasklist", tasks);
 		return new ModelAndView(getListPage(), model);
 	}
