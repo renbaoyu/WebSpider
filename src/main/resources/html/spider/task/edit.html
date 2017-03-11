@@ -3,9 +3,10 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <link href="/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet"></link>
+<link href="/style/common.css" rel="stylesheet"></link>
 <title>监测任务管理</title>
 </head>
-<body style="padding: 20px;">
+<body>
 	<form th:action="${action}" method="post" th:object="${task}"
 		role="form" class="form-horizontal">
 		<input name="id" th:field="*{id}" type="hidden" />
@@ -32,7 +33,7 @@
 				<div class="form-group">
 					<label for="startUrl" class="col-sm-1 control-label">起始URL</label>
 					<div class="col-sm-11">
-						<input type="text" class="form-control" id="startUrl"
+						<input type="url" class="form-control" id="startUrl"
 							th:field="*{startUrl}" placeholder="请输入起始URL" />
 					</div>
 				</div>

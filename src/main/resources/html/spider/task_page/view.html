@@ -3,43 +3,98 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>监测任务管理</title>
+<link href="/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet"></link>
+<link href="/style/common.css" rel="stylesheet"></link>
 </head>
 <body>
-	<ul>
-		<li><label>页面名称</label><label th:text="${page.name}"></label></li>
-		<li><label>URL表达式类型</label><label
-			th:text="${page.urlRuleType.name}"></label></li>
-		<li><label>URL表达式</label><label
-			th:text="${page.urlRuleExpression}"></label></li>
-		<li><label>是否目标页面</label><label th:text="${page.target}"></label></li>
-		<li><label>加载完成后延时(秒)</label><label th:text="${page.loadedDelay}"></label></li>
-	</ul>
-	<a th:href="@{'/spider/task/view/' + ${page.task.id}}">返回</a>
-	<br/>
-	<label>页面抽取内容设置</label>
-	<a th:href="@{'/spider/task_content/new?page=' + ${page.id}}">新增</a>
-	<table>
-		<thead>
-			<tr>
-				<th>序号</th>
-				<th>操作</th>
-				<th>内容名称</th>
-				<th>内容表达式类型</th>
-				<th>内容表达式</th>
-				<th>可否为空</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="item:${taskContentlist}">
-				<td th:text="${itemStat.count}">1</td>
-				<td><a th:href="@{'/spider/task_content/edit/' + ${item.id}}">修改</a>
-					<a th:href="@{'/spider/task_content/delete/' + ${item.id}}">删除</a></td>
-				<td th:text="${item.name}"></td>
-				<td th:text="${item.ruleType.name}"></td>
-				<td th:text="${item.ruleExpression}"></td>
-				<td th:text="${item.emptyEnabled}"></td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<a th:href="@{'/spider/task/view/' + ${page.task.id}}"
+				class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span>
+				返回</a> <a href="" class="btn btn-default"><span
+				class="glyphicon glyphicon-refresh"></span> 刷新</a> <a
+				th:href="@{'/spider/task_content/new?page=' + ${page.id}}"
+				class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>
+				新增</a>
+		</div>
+	</div>
+	<div class="panel panel-default" th:object="${page}">
+		<div class="panel-heading">
+			<h3 class="panel-title">页面设置详情</h3>
+		</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<label for="name" class="col-sm-1 control-label">页面名称</label>
+				<div class="col-sm-11">
+					<input type="text" class="form-control" id="name"
+						th:field="*{name}" readonly="readonly" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="urlRuleType" class="col-sm-1 control-label">URL表达式类型</label>
+				<div class="col-sm-11">
+					<input type="text" class="form-control" id="urlRuleType"
+						th:field="*{urlRuleType.name}" readonly="readonly" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="urlRuleExpression" class="col-sm-1 control-label">URL表达式</label>
+				<div class="col-sm-11">
+					<input type="text" class="form-control" id="urlRuleExpression"
+						th:field="*{urlRuleExpression}" readonly="readonly" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-1 col-sm-11">
+					<div class="checkbox">
+						<label> <input type="checkbox"
+							id="target" th:field="*{target}" readonly="readonly" />
+							是否目标页面
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="loadedDelay" class="col-sm-1 control-label">加载完成后延时(秒)</label>
+				<div class="col-sm-11">
+					<input type="number" class="form-control" id="loadedDelay"
+						th:field="*{loadedDelay}" readonly="readonly" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">页面抽取内容列表</h3>
+		</div>
+		<div class="panel-body">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>序号</th>
+						<th>操作</th>
+						<th>内容名称</th>
+						<th>内容表达式类型</th>
+						<th>内容表达式</th>
+						<th>可否为空</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item:${taskContentlist}">
+						<td th:text="${itemStat.count}">1</td>
+						<td><a th:href="@{'/spider/task_content/edit/' + ${item.id}}"
+							class="glyphicon glyphicon-edit" title="修改"></a> <a
+							th:href="@{'/spider/task_content/delete/' + ${item.id}}"
+							class="glyphicon glyphicon-remove" title="删除"></a></td>
+						<td th:text="${item.name}"></td>
+						<td th:text="${item.ruleType.name}"></td>
+						<td th:text="${item.ruleExpression}"></td>
+						<td th:text="${item.emptyEnabled} ? '是' : '否'"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div th:include="/common/footer::foot"></div>
 </body>
 </html>

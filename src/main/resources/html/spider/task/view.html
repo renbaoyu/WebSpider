@@ -4,15 +4,20 @@
 <head>
 <title>监测任务管理</title>
 <link href="/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet"></link>
+<link href="/style/common.css" rel="stylesheet"></link>
 </head>
-<body style="padding: 20px;">
+<body>
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<a href="/spider/task/list" class="btn btn-default"><span
-				class="glyphicon glyphicon-log-in"></span> 返回</a>
+				class="glyphicon glyphicon-log-in"></span> 返回</a> <a href=""
+				class="btn btn-default"><span
+				class="glyphicon glyphicon-refresh"></span> 刷新</a> <a
+				th:href="@{'/spider/task_page/new?task=' + ${task.id}}"
+				class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>
+				新增</a>
 		</div>
 	</div>
-	<input name="id" th:field="*{id}" type="hidden" />
 	<div class="panel panel-default" th:object="${task}">
 		<div class="panel-heading">
 			<h3 class="panel-title">监测任务详情</h3>
@@ -55,36 +60,42 @@
 			</div>
 		</div>
 	</div>
-	<br />
-	<label>页面信息设置</label>
-	<a th:href="@{'/spider/task_page/new?task=' + ${task.id}}">新增</a>
-	<table>
-		<thead>
-			<tr>
-				<th>序号</th>
-				<th>操作</th>
-				<th>页面名称</th>
-				<th>页面URL表达式类型</th>
-				<th>页面URL表达式</th>
-				<th>是否目标页面</th>
-				<th>加载完成后延时(秒)</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="item:${taskPagelist}">
-				<td th:text="${itemStat.count}">1</td>
-				<td><a th:href="@{'/spider/task_page/edit/' + ${item.id}}">修改</a>
-					<a th:if="!${item.startPage}"
-					th:href="@{'/spider/task_page/delete/' + ${item.id}}">删除</a></td>
-				<td><a th:href="@{'/spider/task_page/view/' + ${item.id}}"
-					th:text="${item.name}"></a></td>
-				<td th:text="${item.urlRuleType.name}"></td>
-				<td th:text="${item.urlRuleExpression}"></td>
-				<td th:text="${item.target} ? '是' : '否'"></td>
-				<td th:text="${item.loadedDelay}"></td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="panel panel-default" th:object="${task}">
+		<div class="panel-heading">
+			<h3 class="panel-title">页面设置列表</h3>
+		</div>
+		<div class="panel-body">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>序号</th>
+						<th>操作</th>
+						<th>页面名称</th>
+						<th>页面URL表达式类型</th>
+						<th>页面URL表达式</th>
+						<th>是否目标页面</th>
+						<th>加载完成后延时(秒)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item:${taskPagelist}">
+						<td th:text="${itemStat.count}">1</td>
+						<td><a th:href="@{'/spider/task_page/edit/' + ${item.id}}"
+							class="glyphicon glyphicon-edit" title="修改"></a> <a
+							th:if="!${item.startPage}"
+							th:href="@{'/spider/task_page/delete/' + ${item.id}}"
+							class="glyphicon glyphicon-remove" title="删除"></a></td>
+						<td><a th:href="@{'/spider/task_page/view/' + ${item.id}}"
+							th:text="${item.name}"></a></td>
+						<td th:text="${item.urlRuleType.name}"></td>
+						<td th:text="${item.urlRuleExpression}"></td>
+						<td th:text="${item.target} ? '是' : '否'"></td>
+						<td th:text="${item.loadedDelay}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 	<div th:include="/common/footer::foot"></div>
 </body>
 </html>

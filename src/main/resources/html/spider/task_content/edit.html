@@ -3,29 +3,66 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>抓取任务管理</title>
+<link href="/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet"></link>
+<link href="/style/common.css" rel="stylesheet"></link>
 </head>
 <body>
-	<label>抓取内容设置</label>
 	<form th:action="${action}" method="post" th:object="${content}">
-		<input name="page.id" th:value="${pageid}" type="hidden" />
-		<input name="id" th:field="*{id}" type="hidden" />
-		<ul>
-			<li><label>内容名称</label><input type="text" name="name"
-				th:field="*{name}" /></li>
-			<li><label>规则表达式类型</label><select name="ruleType"
-				th:field="*{ruleType}">
-					<option value="Normal">普通查找</option>
-					<option value="JSoup">JSoup</option>
-					<option value="Regex">正则表达式</option>
-					<option value="XPath">XPath</option>
-					<option value="CSS">CSS选择器</option>
-			</select></li>
-			<li><label>规则表达式</label><input type="text" name="ruleExpression"
-				th:field="*{ruleExpression}" /></li>
-			<li><label>内容可否为空</label><input type="text" name="emptyEnabled"
-				th:field="*{emptyEnabled}" /></li>
-		</ul>
-		<input type="submit" value="提交" /> <a th:href="@{'/spider/task_page/view/' + ${pageid}}">返回</a>
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<a th:href="@{'/spider/task_page/view/' + ${pageid}}"
+					class="btn btn-default"><span
+					class="glyphicon glyphicon-log-in"></span> 返回</a> <a id="submit"
+					class="btn btn-success" href="javascript:void(0)"><span
+					class="glyphicon glyphicon-ok"></span>提交</a>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">页面抽取内容设置</h3>
+			</div>
+			<div class="panel-body">
+				<input name="page.id" th:value="${pageid}" type="hidden" /> <input
+					name="id" th:field="*{id}" type="hidden" />
+				<div class="form-group">
+					<label for="name" class="col-sm-1 control-label">内容名称</label>
+					<div class="col-sm-11">
+						<input type="text" class="form-control" id="name"
+							th:field="*{name}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="ruleType" class="col-sm-1 control-label">规则表达式类型</label>
+					<div class="col-sm-11">
+						<select name="ruleType" th:field="*{ruleType}"
+							class="form-control">
+							<option value="Normal">普通查找</option>
+							<option value="JSoup">JSoup</option>
+							<option value="Regex">正则表达式</option>
+							<option value="XPath">XPath</option>
+							<option value="CSS">CSS选择器</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="ruleExpression" class="col-sm-1 control-label">URL表达式</label>
+					<div class="col-sm-11">
+						<input type="text" class="form-control" id="ruleExpression"
+							th:field="*{ruleExpression}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-1 col-sm-11">
+						<div class="checkbox">
+							<label> <input type="checkbox" id="emptyEnabled"
+								th:field="*{emptyEnabled}" /> 内容可否为空
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</form>
+	<div th:include="/common/footer::foot"></div>
 </body>
 </html>
