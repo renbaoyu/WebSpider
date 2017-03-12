@@ -1,6 +1,9 @@
 package com.renby.spider.web.controller;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
@@ -47,11 +50,13 @@ public class RunLogController extends AbstractController{
 	 * 
 	 * @param id
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping("delete/{id}")
-	public ModelAndView delete(@PathVariable("id") Long id) {
+	public ModelAndView delete(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {
 		runLogRepository.delete(id);
-		return list(null, Integer.valueOf(LIST_DEFAULT_PAGE), Integer.valueOf(LIST_DEFAULT_PAGE_SIZE));
+		response.sendRedirect(getListPage());
+		return null;
 	}
 
 	/**
@@ -59,11 +64,13 @@ public class RunLogController extends AbstractController{
 	 * 
 	 * @param id
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping("deleteall")
-	public ModelAndView deleteAll() {
+	public ModelAndView deleteAll(HttpServletResponse response) throws IOException {
 		runLogRepository.deleteAll();
-		return list(null, Integer.valueOf(LIST_DEFAULT_PAGE), Integer.valueOf(LIST_DEFAULT_PAGE_SIZE));
+		response.sendRedirect(getListPage());
+		return null;
 	}
 
 	@Override

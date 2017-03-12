@@ -1,6 +1,9 @@
 package com.renby.spider.web.controller;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
@@ -15,9 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.renby.spider.web.entity.RunResult;
 import com.renby.spider.web.entity.RunResultPage;
-import com.renby.spider.web.repository.RunResultDataRepository;
 import com.renby.spider.web.repository.RunResultPageRepository;
 import com.renby.spider.web.repository.RunResultRepository;
+import com.renby.spider.web.service.IRunResultService;
 
 @RestController
 @RequestMapping(RunResultController.BASE_URL)
@@ -28,7 +31,7 @@ public class RunResultController extends AbstractController {
 	@Autowired
 	private RunResultPageRepository resultPageRepository;
 	@Autowired
-	private RunResultDataRepository resultDataRepository;
+	private IRunResultService runResultService;
 
 	/**
 	 * 列表
@@ -81,15 +84,13 @@ public class RunResultController extends AbstractController {
 	 * 
 	 * @param id
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping("delete/{id}")
-	public ModelAndView delete(@PathVariable("id") Long id) {
-		RunResult result = resultRepository.findOne(id);
-		List<RunResultPage> pages = resultPageRepository.findByResult(result);
-		resultDataRepository.deleteByPageIn(pages);
-		resultPageRepository.deleteInBatch(pages);
-		resultRepository.delete(result);
-		return list(null, Integer.valueOf(LIST_DEFAULT_PAGE), Integer.valueOf(LIST_DEFAULT_PAGE_SIZE));
+	public ModelAndView delete(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {
+		runResultService.deleteRunResultById(id);
+		response.sendRedirect(getListPage());
+		return null;
 	}
 
 	@Override

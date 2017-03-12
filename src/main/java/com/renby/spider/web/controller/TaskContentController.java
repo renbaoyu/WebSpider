@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.renby.spider.web.entity.TaskContentRule;
 import com.renby.spider.web.repository.TaskContentRuleRepository;
+import com.renby.spider.web.service.ITaskService;
 
 @RestController
 @RequestMapping(TaskContentController.BASE_URL)
@@ -23,6 +24,8 @@ public class TaskContentController extends AbstractController {
 	public static final String BASE_URL = "/spider/task_content";
 	@Autowired
 	private TaskContentRuleRepository taskContentRepository;
+	@Autowired
+	private ITaskService taskService;
 
 	/**
 	 * 新增页面
@@ -91,7 +94,7 @@ public class TaskContentController extends AbstractController {
 	public ModelAndView delete(@PathVariable("id") Long id, HttpServletResponse response)
 			throws ServletException, IOException {
 		TaskContentRule content = taskContentRepository.findOne(id);
-		taskContentRepository.delete(id);
+		taskService.deleteTaskContent(id);
 		response.sendRedirect("/spider/task_page/view/" + content.getPage().getId());
 		return null;
 	}

@@ -1,7 +1,7 @@
 package com.renby.spider.init.config;
 
-import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement(proxyTargetClass = true)
 @EnableJpaRepositories(basePackages="com.renby.**.repository")
-@EntityScan(basePackages="com.renby.**.entity")
+@ComponentScan(basePackages = "com.renby.**.entity")
 public class JpaConfiguration {
 	@Bean
 	PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor(){

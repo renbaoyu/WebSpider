@@ -1,6 +1,7 @@
 package com.renby.spider.web.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,10 +20,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.renby.spider.web.entity.Task;
 import com.renby.spider.web.entity.TaskPageRule;
-import com.renby.spider.web.repository.TaskContentRuleRepository;
 import com.renby.spider.web.repository.TaskPageRuleRepository;
 import com.renby.spider.web.repository.TaskRepository;
 import com.renby.spider.web.service.ISpiderExcuteService;
+import com.renby.spider.web.service.ITaskService;
 
 @RestController
 @RequestMapping(TaskController.BASE_URL)
@@ -33,9 +34,9 @@ public class TaskController extends AbstractController {
 	@Autowired
 	private TaskPageRuleRepository taskPageRepository;
 	@Autowired
-	private TaskContentRuleRepository taskContentRepository;
-	@Autowired
 	private ISpiderExcuteService excuteService;
+	@Autowired
+	private ITaskService taskService;
 
 	/**
 	 * 列表
@@ -138,15 +139,13 @@ public class TaskController extends AbstractController {
 	 * 
 	 * @param id
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping("delete/{id}")
-	public ModelAndView delete(@PathVariable("id") Long id) {
-		Task task = taskRepository.findOne(id);
-		List<TaskPageRule> pages = taskPageRepository.findByTask(task);
-		taskContentRepository.deleteByPageIn(pages);
-		taskPageRepository.deleteInBatch(pages);
-		taskRepository.delete(task);
-		return list(null, Integer.valueOf(LIST_DEFAULT_PAGE), Integer.valueOf(LIST_DEFAULT_PAGE_SIZE));
+	public ModelAndView delete(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {
+		taskService.deleteTask(id);
+		response.sendRedirect(getListPage());
+		return null;
 	}
 
 	/**
@@ -177,7 +176,7 @@ public class TaskController extends AbstractController {
 			model.addAttribute("taskPagelist", taskPageList);
 		} else {
 			model.addAttribute("task", new Task());
-			model.addAttribute("taskPagelist", new TaskPageRule());
+			model.addAttribute("taskPagelist", new ArrayList<TaskPageRule>());
 
 		}
 		return model;

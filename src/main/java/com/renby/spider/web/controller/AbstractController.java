@@ -33,6 +33,10 @@ public abstract class AbstractController {
 	public String getViewPageUrl(long id) {
 		return getBasePage() + PAGE_VIEW + "/" + id;
 	}
+	
+	public String getEditPageUrl(long id) {
+		return getBasePage() + PAGE_EDIT + "/" + id;
+	}
 
 	public void setPagination(ModelMap model, PageImpl<?> pageImpl, String baseUrl, String keywords, int pagesize,
 			int page) {

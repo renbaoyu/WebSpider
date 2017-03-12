@@ -19,6 +19,7 @@ import com.renby.spider.web.entity.TaskContentRule;
 import com.renby.spider.web.entity.TaskPageRule;
 import com.renby.spider.web.repository.TaskContentRuleRepository;
 import com.renby.spider.web.repository.TaskPageRuleRepository;
+import com.renby.spider.web.service.ITaskService;
 
 @RestController
 @RequestMapping(TaskPageController.BASE_URL)
@@ -28,6 +29,8 @@ public class TaskPageController extends AbstractController {
 	private TaskPageRuleRepository taskPageRepository;
 	@Autowired
 	private TaskContentRuleRepository taskContentRepository;
+	@Autowired
+	private ITaskService taskService;
 
 	/**
 	 * 新增页面
@@ -110,8 +113,7 @@ public class TaskPageController extends AbstractController {
 	@RequestMapping("delete/{id}")
 	public ModelAndView delete(@PathVariable("id") Long id, HttpServletResponse response) throws ServletException, IOException {
 		TaskPageRule page = taskPageRepository.findOne(id);
-		taskContentRepository.deleteByPage(page);
-		taskPageRepository.delete(page);
+		taskService.deleteTaskPage(id);
 		response.sendRedirect("/spider/task/view/" + page.getTask().getId());
 		return null;
 	}

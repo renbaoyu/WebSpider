@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
-@RequestMapping("/spider")
+@RequestMapping({"/spider",""})
 public class PortalController {
 	@RequestMapping()
 	public ModelAndView home() {
