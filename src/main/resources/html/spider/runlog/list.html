@@ -19,33 +19,30 @@
 		<thead>
 			<tr>
 				<th>序号</th>
-				<th>操作</th>
 				<th>监测任务</th>
 				<th>计划任务</th>
 				<th>完成时间</th>
-				<th>URL</th>
+				<th>网页标题</th>
 				<th>内容类型</th>
-				<th>内容字符集</th>
 				<th>状态码</th>
 				<th>网页截图</th>
+				<th>操作</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="item:${runloglist}">
 				<td th:text="${itemStat.count}">1</td>
-				<td><a th:href="@{'/spider/runlog/delete/' + ${item.id}}"
-					class="glyphicon glyphicon-remove" title="删除"></a></td>
 				<td th:text="${item.taskName}"></td>
 				<td th:text="${item.explanName}"></td>
 				<td
 					th:text="${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-				<td><a th:href="${item.url}" th:text="${item.url}"
+				<td><a th:href="${item.url}" th:text="${item.title}"
 					target="_blank"></a></td>
 				<td th:text="${item.contentType}"></td>
-				<td th:text="${item.contentCharset}"></td>
 				<td th:text="${item.stateCode}"></td>
-				<td><a th:href="${item.screenshotUrl}"
-					th:text="${item.screenshotUrl}" target="_blank"></a></td>
+				<td><a th:href="${item.screenshotUrl}" target="_blank">网页截图</a></td>
+				<td><a th:href="@{'/spider/runlog/delete/' + ${item.id}}"
+					class="glyphicon glyphicon-remove" title="删除"></a></td>
 			</tr>
 		</tbody>
 	</table>

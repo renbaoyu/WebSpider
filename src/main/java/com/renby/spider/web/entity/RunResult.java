@@ -20,6 +20,7 @@ public class RunResult implements Serializable {
 	private String name;
 	private String url;
 	private String screenshotUrl;
+	private String title;
 	private Date finishedTime = new Date();
 	@ManyToOne
 	@JoinColumn(name = "taskid")
@@ -71,5 +72,13 @@ public class RunResult implements Serializable {
 
 	public void setScreenshotUrl(String screenshotUrl) {
 		this.screenshotUrl = screenshotUrl;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

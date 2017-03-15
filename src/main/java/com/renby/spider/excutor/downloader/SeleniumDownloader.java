@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.Keys;
@@ -62,10 +63,6 @@ public class SeleniumDownloader implements Downloader, Closeable {
 		}
 		webDriver.get(request.getUrl());
 		try {
-			for(int i = 0; i < 20; i++){
-				webDriver.getKeyboard().sendKeys(Keys.PAGE_DOWN);
-				Thread.sleep(10);
-			}
 			webDriver.getKeyboard().sendKeys(Keys.END);
 			SuperSpider spider = (SuperSpider) task;
 			Thread.sleep(spider.getPageRule().getLoadedDelay() * 1000);
@@ -83,6 +80,8 @@ public class SeleniumDownloader implements Downloader, Closeable {
 		ExtendPage page = new ExtendPage();
 		page.setRawText(webDriver.getPageSource());
 		page.setUrl(new PlainText(request.getUrl()));
+		String title = webDriver.getTitle();
+		page.setTitle(StringUtils.isEmpty(title) ? "无标题" : title);
 		page.setRequest(request);
 		page.setContentBytes(webDriver.getPageSource().getBytes());
 		return page;

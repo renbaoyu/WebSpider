@@ -19,23 +19,17 @@
 		<thead>
 			<tr>
 				<th>序号</th>
-				<th>操作</th>
 				<th>任务名称</th>
 				<th>开始URL</th>
 				<th>完成模式</th>
 				<th>网页类型</th>
 				<th>备注</th>
+				<th>操作</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="item:${tasklist}">
 				<td th:text="${itemStat.count}">1</td>
-				<td><a th:href="@{'/spider/task/edit/' + ${item.id}}"
-					class="glyphicon glyphicon-edit" title="修改"></a> <a
-					th:href="@{'/spider/task/delete/' + ${item.id}}"
-					class="glyphicon glyphicon-remove" title="删除"></a> <a
-					th:href="@{'/spider/task/run/' + ${item.id}}"
-					class="glyphicon glyphicon-play" title="立即执行"></a></td>
 				<td><a th:href="@{'/spider/task/view/' + ${item.id}}"
 					th:text="${item.name}"></a></td>
 				<td><a th:href="${item.startUrl}" th:text="${item.startUrl}"
@@ -43,6 +37,12 @@
 				<td th:text="${item.finishedMode.name}"></td>
 				<td th:text="${item.siteType.name}"></td>
 				<td th:text="${item.remarks}"></td>
+				<td><a th:href="@{'/spider/task/edit/' + ${item.id}}"
+					class="glyphicon glyphicon-edit" title="修改"></a> <a
+					th:href="@{'/spider/task/delete/' + ${item.id}}"
+					class="glyphicon glyphicon-remove" title="删除"></a> <a
+					th:href="@{'/spider/task/run/' + ${item.id}}"
+					class="glyphicon glyphicon-play" title="立即执行"></a></td>
 			</tr>
 		</tbody>
 	</table>

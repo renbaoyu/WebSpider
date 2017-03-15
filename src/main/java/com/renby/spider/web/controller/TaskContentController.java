@@ -74,14 +74,13 @@ public class TaskContentController extends AbstractController {
 	 * 
 	 * @param modifierdContent
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping(value = "edit", method = RequestMethod.POST)
-	public ModelAndView update(TaskContentRule modifierdContent) {
-		TaskContentRule saved = taskContentRepository.save(modifierdContent);
-		ModelMap model = getModel(saved);
-		model.addAttribute("pageid", saved.getPage().getId());
-		model.addAttribute("action", getEditPage());
-		return new ModelAndView(getEditPage(), model);
+	public ModelAndView update(TaskContentRule modifierdContent, HttpServletResponse response) throws IOException {
+		taskContentRepository.save(modifierdContent);
+		response.sendRedirect("/spider/task_page/view/" + modifierdContent.getPage().getId());
+		return null;
 	}
 
 	/**

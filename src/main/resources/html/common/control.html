@@ -3,11 +3,14 @@
 	xmlns:th="http://www.thymeleaf.org">
 <div class="text-center" th:fragment="pagination">
 	<ul class="pagination">
-		<li><a th:href="@{${pagination.listUrl} + '&amp;page=' + ${pagination.pages[0]}}">&laquo;</a></li>
-		<li th:class="${pageNum}eq${pagination.page} ? 'active'" th:each="pageNum:${pagination.pages}"><a
+		<li><a
+			th:href="@{${pagination.listUrl} + '&amp;page=' + ${pagination.pages[0]}}">&laquo;</a></li>
+		<li th:class="${pageNum}eq${pagination.page} ? 'active'"
+			th:each="pageNum:${pagination.pages}"><a
 			th:href="@{${pagination.listUrl} + '&amp;page=' + ${pageNum}}"
 			th:text="${pageNum} + 1"></a></li>
-		<li><a th:href="@{${pagination.listUrl} + '&amp;page=' + ${pagination.size - 1}}">&raquo;</a></li>
+		<li><a
+			th:href="@{${pagination.listUrl} + '&amp;page=' + ${pagination.size gt 0 ? pagination.size - 1: 0}}">&raquo;</a></li>
 	</ul>
 </div>
 </html>

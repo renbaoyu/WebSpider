@@ -96,14 +96,15 @@ public class TaskController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping(value = "new", method = RequestMethod.POST)
-	public ModelAndView create(Task newTask) {
+	public ModelAndView create(Task newTask, HttpServletResponse response) throws IOException {
 		taskRepository.save(newTask);
 		TaskPageRule startPage = new TaskPageRule();
 		startPage.setTask(newTask);
 		startPage.setStartPage(true);
 		startPage.setName("任务首页");
 		taskPageRepository.save(startPage);
-		return list(null, Integer.valueOf(LIST_DEFAULT_PAGE), Integer.valueOf(LIST_DEFAULT_PAGE_SIZE));
+		response.sendRedirect(getListPage());
+		return null;
 	}
 
 	/**
@@ -125,13 +126,13 @@ public class TaskController extends AbstractController {
 	 * 
 	 * @param modifierdTask
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping(value = "edit", method = RequestMethod.POST)
-	public ModelAndView update(Task modifierdTask) {
-		Task saved = taskRepository.save(modifierdTask);
-		ModelMap model = getModel(saved);
-		model.addAttribute("action", getEditPage());
-		return new ModelAndView(getEditPage(), model);
+	public ModelAndView update(Task modifierdTask, HttpServletResponse response) throws IOException {
+		taskRepository.save(modifierdTask);
+		response.sendRedirect(getListPage());
+		return null;
 	}
 
 	/**

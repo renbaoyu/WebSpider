@@ -19,9 +19,9 @@
 				<th>序号</th>
 				<th>任务名称</th>
 				<th>完成时间</th>
-				<th>URL</th>
-				<th>截图</th>
-				<th></th>
+				<th>首页标题</th>
+				<th>网页截图</th>
+				<th>操作</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -31,10 +31,9 @@
 					th:text="${item.name}"></a></td>
 				<td
 					th:text="${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-				<td><a th:href="${item.url}" th:text="${item.url}"
+				<td><a th:href="${item.url}" th:text="${item.title}"
 					target="_blank"></a></td>
-				<td><a th:href="${item.screenshotUrl}"
-					th:text="${item.screenshotUrl}" target="_blank"></a></td>
+				<td><a th:href="${item.screenshotUrl}" target="_blank">网页截图</a></td>
 				<td><a th:href="@{'/spider/runresult/delete/' + ${item.id}}"
 					class="glyphicon glyphicon-remove" title="删除"></a></td>
 			</tr>

@@ -79,7 +79,7 @@ public class SuperSpider extends Spider {
         pageProcessor.process(page);
         extractAndAddRequests(page, spawnUrl);
         if (!page.getResultItems().isSkip()) {
-        	group.getListener().onPipeLine(this, (ExtendResultItems) page.getResultItems());
+        	group.getListener().onPipeLine(this, (ExtendPage) page);
             for (Pipeline pipeline : pipelines) {
                 pipeline.process(page.getResultItems(), this);
             }

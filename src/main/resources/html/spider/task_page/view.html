@@ -72,24 +72,24 @@
 				<thead>
 					<tr>
 						<th>序号</th>
-						<th>操作</th>
 						<th>内容名称</th>
 						<th>内容表达式类型</th>
 						<th>内容表达式</th>
 						<th>可否为空</th>
+						<th>操作</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="item:${taskContentlist}">
 						<td th:text="${itemStat.count}">1</td>
-						<td><a th:href="@{'/spider/task_content/edit/' + ${item.id}}"
-							class="glyphicon glyphicon-edit" title="修改"></a> <a
-							th:href="@{'/spider/task_content/delete/' + ${item.id}}"
-							class="glyphicon glyphicon-remove" title="删除"></a></td>
 						<td th:text="${item.name}"></td>
 						<td th:text="${item.ruleType.name}"></td>
 						<td th:text="${item.ruleExpression}"></td>
 						<td th:text="${item.emptyEnabled} ? '是' : '否'"></td>
+						<td><a th:href="@{'/spider/task_content/edit/' + ${item.id}}"
+							class="glyphicon glyphicon-edit" title="修改"></a> <a
+							th:href="@{'/spider/task_content/delete/' + ${item.id}}"
+							class="glyphicon glyphicon-remove" title="删除"></a></td>
 					</tr>
 				</tbody>
 			</table>

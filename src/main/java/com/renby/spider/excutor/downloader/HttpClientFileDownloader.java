@@ -3,6 +3,7 @@ package com.renby.spider.excutor.downloader;
 import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 
 import com.renby.spider.excutor.ExtendPage;
@@ -25,12 +26,14 @@ public class HttpClientFileDownloader extends HttpClientDownloader {
 		byte[] contentBytes = getContentBytes(httpResponse);
 		String content = getContent(charset, httpResponse, contentBytes);
 		ExtendPage page = new ExtendPage();
+		page.setRequest(request);
 		page.setContentBytes(contentBytes);
 		page.setContentType(getContentType(httpResponse));
 		page.setContentCharset(getHtmlCharset(httpResponse, contentBytes));
 		page.setRawText(content);
 		page.setUrl(new PlainText(request.getUrl()));
-		page.setRequest(request);
+		String title = page.getHtml().xpath("//title/text()").get();
+		page.setTitle(StringUtils.isEmpty(title) ? "无标题" : title);
 		page.setStatusCode(httpResponse.getStatusLine().getStatusCode());
 		return page;
 	}

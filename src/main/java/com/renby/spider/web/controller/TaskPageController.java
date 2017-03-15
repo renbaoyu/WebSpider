@@ -90,16 +90,15 @@ public class TaskPageController extends AbstractController {
 	/**
 	 * 修改提交
 	 * 
-	 * @param modifierdTask
+	 * @param modifiredPage
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping(value = "edit", method = RequestMethod.POST)
-	public ModelAndView update(TaskPageRule modifierdTask) {
-		TaskPageRule saved = taskPageRepository.save(modifierdTask);
-		ModelMap model = getModel(saved);
-		model.addAttribute("taskid", saved.getTask().getId());
-		model.addAttribute("action", getEditPage());
-		return new ModelAndView(getEditPage(), model);
+	public ModelAndView update(TaskPageRule modifiredPage, HttpServletResponse response) throws IOException {
+		taskPageRepository.save(modifiredPage);
+		response.sendRedirect("/spider/task/view/" + modifiredPage.getTask().getId());
+		return null;
 	}
 
 	/**

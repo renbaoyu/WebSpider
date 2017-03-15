@@ -38,10 +38,9 @@
 							th:text="${item.name}"></a></td>
 						<td
 							th:text="${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-						<td><a th:href="${item.url}" th:text="${item.url}"
+						<td><a th:href="${item.url}" th:text="${item.title}"
 							target="_blank"></a></td>
-						<td><a th:href="${item.screenshotUrl}"
-							th:text="${item.screenshotUrl}" target="_blank"></a></td>
+						<td><a th:href="${item.screenshotUrl}" target="_blank">网页截图</a></td>
 					</tr>
 				</tbody>
 			</table>

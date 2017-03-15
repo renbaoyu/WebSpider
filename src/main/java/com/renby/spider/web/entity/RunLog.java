@@ -20,7 +20,7 @@ public class RunLog implements Serializable {
 	private String explanName;
 	private String url;
 	private String parentUrl;
-	private String contentCharset;
+	private String title;
 	private String contentType;
 	private int stateCode;
 	@Column(columnDefinition = "MEDIUMBLOB")
@@ -76,14 +76,6 @@ public class RunLog implements Serializable {
 		this.finishedTime = finishedTime;
 	}
 
-	public String getContentCharset() {
-		return contentCharset;
-	}
-
-	public void setContentCharset(String contentCharset) {
-		this.contentCharset = contentCharset;
-	}
-
 	public String getParentUrl() {
 		return parentUrl;
 	}
@@ -114,6 +106,14 @@ public class RunLog implements Serializable {
 
 	public void setExplanName(String explanName) {
 		this.explanName = explanName;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 }

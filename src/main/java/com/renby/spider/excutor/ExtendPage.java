@@ -18,6 +18,7 @@ import us.codecraft.webmagic.ResultItems;
 public class ExtendPage extends Page{
 	private byte[] contentBytes;
 
+	private String title;
 	private String contentType;
 	
 	private String contentCharset;
@@ -80,5 +81,13 @@ public class ExtendPage extends Page{
 
 	public void putNewURL(SuperSpider spider,  List<String> newURLMap) {
 		this.newURLMap.put(spider, newURLMap);
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

@@ -74,12 +74,12 @@ public class RunTimeListenServiceImpl implements IRunTimeListenService {
 		RunLog log = new RunLog();
 		log.setContent(page.getContentBytes());
 		log.setContentType(page.getContentType());
-		log.setContentCharset(page.getContentCharset());
 		log.setTaskName(task.getName());
-		if(explan != null){
+		if (explan != null) {
 			log.setExplanName(explan.getName());
 		}
 		log.setFinishedTime(new Date());
+		log.setTitle(page.getTitle());
 		log.setUrl(page.getUrl().get());
 		log.setParentUrl(((ExtendRequest) page.getRequest()).getParent());
 		log.setStateCode(page.getStatusCode());
@@ -89,15 +89,17 @@ public class RunTimeListenServiceImpl implements IRunTimeListenService {
 	}
 
 	@Override
-	public void onPipeLine(SuperSpider spider, ExtendResultItems resultItems) {
-		if(spider.getPageRule().isTarget()){
+	public void onPipeLine(SuperSpider spider, ExtendPage page) {
+		if (spider.getPageRule().isTarget()) {
 			RunResultPage pageResult = new RunResultPage();
 			pageResult.setResult(spider.getGroup().getResult());
-			pageResult.setScreenshotUrl((String) resultItems.getRequest().getExtra(SeleniumDownloader.SCREENSHOT_URL));
-			pageResult.setUrl(resultItems.getRequest().getUrl());
+			pageResult.setScreenshotUrl((String) page.getRequest().getExtra(SeleniumDownloader.SCREENSHOT_URL));
+			pageResult.setTitle(page.getTitle());
+			pageResult.setUrl(page.getRequest().getUrl());
 			if (spider.getPageRule().isStartPage()) {
 				pageResult.setName(spider.getTask().getName() + "任务首页面");
 				RunResult runsult = spider.getGroup().getResult();
+				runsult.setTitle(pageResult.getTitle());
 				runsult.setUrl(pageResult.getUrl());
 				runsult.setScreenshotUrl(pageResult.getScreenshotUrl());
 				resultRepository.save(runsult);
@@ -105,9 +107,10 @@ public class RunTimeListenServiceImpl implements IRunTimeListenService {
 				pageResult.setName(spider.getPageRule().getName());
 			}
 			resultPageRepository.save(pageResult);
-			
+
 			List<RunResultData> datas = new ArrayList<RunResultData>();
-			for (Entry<TaskContentRule, Object> entry : resultItems.getRuleResult().entrySet()) {
+			for (Entry<TaskContentRule, Object> entry : ((ExtendResultItems) page.getResultItems()).getRuleResult()
+					.entrySet()) {
 				RunResultData data = new RunResultData();
 				data.setName(entry.getKey().getName());
 				data.setPage(pageResult);
@@ -132,7 +135,7 @@ public class RunTimeListenServiceImpl implements IRunTimeListenService {
 		TaskProgress progress = ProgressManager.getProgress(group);
 		progress.setFinishedTime(new Date());
 		progress.setStatus(TaskStatus.FINISHED);
-		int seconds = (int) ((progress.getFinishedTime().getTime() - progress.getStartTime().getTime())/1000);
+		int seconds = (int) ((progress.getFinishedTime().getTime() - progress.getStartTime().getTime()) / 1000);
 		progress.setCust(seconds);
 		taskProgressRepository.save(progress);
 		logger.info("监测任务[{}]已结束", group.getTask().getName());

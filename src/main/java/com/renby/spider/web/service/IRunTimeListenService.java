@@ -1,7 +1,6 @@
 package com.renby.spider.web.service;
 
 import com.renby.spider.excutor.ExtendPage;
-import com.renby.spider.excutor.ExtendResultItems;
 import com.renby.spider.excutor.SpiderGroup;
 import com.renby.spider.excutor.SuperSpider;
 import com.renby.spider.web.entity.Explan;
@@ -13,5 +12,5 @@ public interface IRunTimeListenService {
 	public void onTaskFinished(SpiderGroup group);
 	public void onSpiderStart(SuperSpider spider);
 	public void onPageProcessed(Task task, Explan explan, ExtendPage page);
-	public void onPipeLine(SuperSpider spider, ExtendResultItems resultItems);
+	public void onPipeLine(SuperSpider spider, ExtendPage page);
 }
