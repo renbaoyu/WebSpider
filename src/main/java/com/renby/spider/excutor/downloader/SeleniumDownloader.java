@@ -11,12 +11,11 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.log4j.Logger;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -52,7 +51,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 	@Override
 	public Page download(Request request, Task task) {
 		logger.info("downloading page " + request.getUrl());
-		WebDriver webDriver = manager.getWebDriver();
+		PhantomJSDriver webDriver = (PhantomJSDriver) manager.getWebDriver();
 		WebDriver.Options manage = webDriver.manage();
 		Site site = task.getSite();
 		if (site.getCookies() != null) {
@@ -63,6 +62,11 @@ public class SeleniumDownloader implements Downloader, Closeable {
 		}
 		webDriver.get(request.getUrl());
 		try {
+			for(int i = 0; i < 20; i++){
+				webDriver.getKeyboard().sendKeys(Keys.PAGE_DOWN);
+				Thread.sleep(10);
+			}
+			webDriver.getKeyboard().sendKeys(Keys.END);
 			SuperSpider spider = (SuperSpider) task;
 			Thread.sleep(spider.getPageRule().getLoadedDelay() * 1000);
 		} catch (InterruptedException e) {
@@ -74,18 +78,13 @@ public class SeleniumDownloader implements Downloader, Closeable {
 				manage.addCookie(cookie);
 			}
 		}
-		WebElement webElement = webDriver.findElement(By.xpath("/html"));
 		screenshot((TakesScreenshot) webDriver, request);
 		manager.returnDriver(webDriver);
-		String content = webElement.getAttribute("outerHTML");
 		ExtendPage page = new ExtendPage();
-		page.setRawText(content);
+		page.setRawText(webDriver.getPageSource());
 		page.setUrl(new PlainText(request.getUrl()));
 		page.setRequest(request);
-		page.setContentBytes(webElement.getText().getBytes());
-		page.setRawText(content);
-		page.setUrl(new PlainText(request.getUrl()));
-		page.setRequest(request);
+		page.setContentBytes(webDriver.getPageSource().getBytes());
 		return page;
 	}
 

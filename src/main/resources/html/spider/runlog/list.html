@@ -35,8 +35,8 @@
 				<td th:text="${itemStat.count}">1</td>
 				<td><a th:href="@{'/spider/runlog/delete/' + ${item.id}}"
 					class="glyphicon glyphicon-remove" title="删除"></a></td>
-				<td th:text="${item.task.name}"></td>
-				<td th:text="${item.explan ne null} ? ${item.explan.name} : ''"></td>
+				<td th:text="${item.taskName}"></td>
+				<td th:text="${item.explanName}"></td>
 				<td
 					th:text="${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
 				<td><a th:href="${item.url}" th:text="${item.url}"

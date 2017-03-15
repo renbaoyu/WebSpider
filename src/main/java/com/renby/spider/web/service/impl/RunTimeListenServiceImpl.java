@@ -19,6 +19,7 @@ import com.renby.spider.excutor.downloader.SeleniumDownloader;
 import com.renby.spider.runtime.ProgressManager;
 import com.renby.spider.web.entity.Explan;
 import com.renby.spider.web.entity.RunLog;
+import com.renby.spider.web.entity.RunResult;
 import com.renby.spider.web.entity.RunResultData;
 import com.renby.spider.web.entity.RunResultPage;
 import com.renby.spider.web.entity.Task;
@@ -74,8 +75,10 @@ public class RunTimeListenServiceImpl implements IRunTimeListenService {
 		log.setContent(page.getContentBytes());
 		log.setContentType(page.getContentType());
 		log.setContentCharset(page.getContentCharset());
-		log.setTask(task);
-		log.setExplan(explan);
+		log.setTaskName(task.getName());
+		if(explan != null){
+			log.setExplanName(explan.getName());
+		}
 		log.setFinishedTime(new Date());
 		log.setUrl(page.getUrl().get());
 		log.setParentUrl(((ExtendRequest) page.getRequest()).getParent());
@@ -91,8 +94,13 @@ public class RunTimeListenServiceImpl implements IRunTimeListenService {
 			RunResultPage pageResult = new RunResultPage();
 			pageResult.setResult(spider.getGroup().getResult());
 			pageResult.setScreenshotUrl((String) resultItems.getRequest().getExtra(SeleniumDownloader.SCREENSHOT_URL));
-			if (spider.getPageRule() == null) {
+			pageResult.setUrl(resultItems.getRequest().getUrl());
+			if (spider.getPageRule().isStartPage()) {
 				pageResult.setName(spider.getTask().getName() + "任务首页面");
+				RunResult runsult = spider.getGroup().getResult();
+				runsult.setUrl(pageResult.getUrl());
+				runsult.setScreenshotUrl(pageResult.getScreenshotUrl());
+				resultRepository.save(runsult);
 			} else {
 				pageResult.setName(spider.getPageRule().getName());
 			}

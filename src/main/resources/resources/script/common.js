@@ -20,5 +20,5 @@ $(function(){
 	});
 
 	// 设置表格的皮肤
-	$("table").addClass("table table-striped");
+	$("table").addClass("table table-striped table-condensed");
 })

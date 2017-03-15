@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import com.renby.spider.web.entity.Task;
 import com.renby.spider.web.entity.TaskPageRule;
 import com.renby.spider.web.repository.ExplanRepository;
-import com.renby.spider.web.repository.RunLogRepository;
 import com.renby.spider.web.repository.TaskContentRuleRepository;
 import com.renby.spider.web.repository.TaskPageRuleRepository;
 import com.renby.spider.web.repository.TaskProgressRepository;
@@ -29,8 +28,6 @@ public class TaskServiceImpl implements ITaskService {
 	@Autowired
 	private ExplanRepository explanRepository;
 	@Autowired
-	private RunLogRepository runLogRepository;
-	@Autowired
 	private IRunResultService runResultService;
 
 	@Override
@@ -39,7 +36,6 @@ public class TaskServiceImpl implements ITaskService {
 		explanRepository.deleteByTask(task);
 		progressRepository.deleteByTask(task);
 		runResultService.deleteRunResultByTask(task);
-		runLogRepository.deleteByTask(task);
 		deleteTaskPage(task);
 		taskRepository.delete(task);
 	}

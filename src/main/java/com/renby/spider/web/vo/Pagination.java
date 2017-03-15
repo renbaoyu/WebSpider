@@ -50,6 +50,9 @@ public class Pagination {
 		for (int i = start; i < end; i++) {
 			pages.add(i);
 		}
+		if(pages.isEmpty()){
+			pages.add(0);
+		}
 	}
 
 	public int getPageCount() {

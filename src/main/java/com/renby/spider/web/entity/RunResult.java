@@ -18,6 +18,8 @@ public class RunResult implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
+	private String url;
+	private String screenshotUrl;
 	private Date finishedTime = new Date();
 	@ManyToOne
 	@JoinColumn(name = "taskid")
@@ -53,5 +55,21 @@ public class RunResult implements Serializable {
 
 	public void setTask(Task task) {
 		this.task = task;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getScreenshotUrl() {
+		return screenshotUrl;
+	}
+
+	public void setScreenshotUrl(String screenshotUrl) {
+		this.screenshotUrl = screenshotUrl;
 	}
 }

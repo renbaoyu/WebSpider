@@ -8,11 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "spider_run_log")
@@ -20,11 +16,8 @@ public class RunLog implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@ManyToOne
-	@JoinColumn(name = "taskid")
-	@JsonBackReference
-	private Task task;
-	private Explan explan;
+	private String taskName;
+	private String explanName;
 	private String url;
 	private String parentUrl;
 	private String contentCharset;
@@ -41,22 +34,6 @@ public class RunLog implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Task getTask() {
-		return task;
-	}
-
-	public void setTask(Task task) {
-		this.task = task;
-	}
-
-	public Explan getExplan() {
-		return explan;
-	}
-
-	public void setExplan(Explan explan) {
-		this.explan = explan;
 	}
 
 	public String getUrl() {
@@ -121,6 +98,22 @@ public class RunLog implements Serializable {
 
 	public void setScreenshotUrl(String screenshotUrl) {
 		this.screenshotUrl = screenshotUrl;
+	}
+
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
+	}
+
+	public String getExplanName() {
+		return explanName;
+	}
+
+	public void setExplanName(String explanName) {
+		this.explanName = explanName;
 	}
 
 }

@@ -17,20 +17,26 @@
 		<thead>
 			<tr>
 				<th>序号</th>
-				<th>操作</th>
 				<th>任务名称</th>
 				<th>完成时间</th>
+				<th>URL</th>
+				<th>截图</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="item:${runresultlist}">
 				<td th:text="${itemStat.count}">1</td>
-				<td><a th:href="@{'/spider/runresult/delete/' + ${item.id}}"
-					class="glyphicon glyphicon-remove" title="删除"></a></td>
 				<td><a th:href="@{'/spider/runresult/view/' + ${item.id}}"
 					th:text="${item.name}"></a></td>
 				<td
 					th:text="${#calendars.format(item.finishedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td><a th:href="${item.url}" th:text="${item.url}"
+					target="_blank"></a></td>
+				<td><a th:href="${item.screenshotUrl}"
+					th:text="${item.screenshotUrl}" target="_blank"></a></td>
+				<td><a th:href="@{'/spider/runresult/delete/' + ${item.id}}"
+					class="glyphicon glyphicon-remove" title="删除"></a></td>
 			</tr>
 		</tbody>
 	</table>
